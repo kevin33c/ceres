@@ -1,0 +1,11 @@
+{
+  "name": "ceres",
+  "version": "1.0.0",
+  "description": "First Ethereum smart contract project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Kevin Chen",
+  "license": "ISC"
+}

@@ -4,8 +4,14 @@
   "description": "First Ethereum smart contract project",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "author": "Kevin Chen",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "ganache-cli": "^6.12.2",
+    "mocha": "^9.1.3",
+    "solc": "^0.4.17",
+    "web3": "^1.6.1"
+  }
 }

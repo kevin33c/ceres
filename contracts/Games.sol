@@ -1,53 +1,55 @@
 pragma solidity >=0.8.7;
 
-contract Inbox {
+contract Games {
     address constant public adminAddress = 0x5B38Da6a701c568545dCfcB03FcB875f56beddC4;
     address public manager;
     address[] public players;
-    uint public offerAmount;
+    uint public makerAmount;
     uint public takerAmount;
+    bool public is_outcome = false;
     mapping (address => bool) public playerWallets;
+    enum OutcomeValue { NO_VALUE, MANAGER_WINS, TAKER_WINS }
+    OutcomeValue public outcomeValue;
 
 
-    constructor() payable minimumRequired {
+    constructor(string memory _gameId) payable minimumRequired {
         //set manager address
         manager = tx.origin;
         players.push(msg.sender);
         playerWallets[msg.sender] = true;
-        offerAmount = msg.value;
+        makerAmount = msg.value;
     }
-
-    /*
-    //move this to constructor
-    function create() public payable minimumRequired onlyManager {
-        //create a game
-        players.push(msg.sender);
-        playerWallets[msg.sender] = true;
-        offerAmount = msg.value;
-    }
-    */
 
     function join() public payable minimumRequired takerAmountLimit notManager {
         //join a game
-        players.push(msg.sender);
-        addTakerAmount(msg.value);
-        playerWallets[msg.sender] = true;
+        if(msg.value <= makerAmount) {
+            players.push(msg.sender);
+            addTakerAmount(msg.value);
+            playerWallets[msg.sender] = true;
+        } else {
+            revert();
+        }
     }
 
-    function pickWinner() public onlyPlayers {
+    function resolve(bool _is_outcome, OutcomeValue _outcomeValue) public onlyAdmin {
+       /******************************************   
+        upon call of admin API it returns outcome 
+        and outcome value;
+       ******************************************/
+       is_outcome = _is_outcome;
+       outcomeValue = _outcomeValue;
+    }
+
+    function distribute() external payable onlyAdmin {
        //
     }
 
-    function distribute() private returns (uint) {
-       //
-    }
-
-    function commission() private returns (uint) {
-       //
-    }
-
-    function endGame() external payable onlyAdmin {
-        payable(manager).transfer(address(this).balance);
+    function end() external payable onlyAdmin {
+        if(is_outcome == false && address(this).balance > 0){
+            payable(manager).transfer(address(this).balance);
+        } else {
+            revert("Outcome already decided OR no balance left to end game");
+        }
     }
 
     function addTakerAmount(uint _amount) private returns (uint) {
@@ -69,7 +71,7 @@ contract Inbox {
 
     modifier takerAmountLimit() {
         require(
-            offerAmount >= takerAmount,
+            makerAmount >= takerAmount,
             "Offer amount must be less than the total taker amount."
         );
         _;
@@ -79,14 +81,6 @@ contract Inbox {
         require(
             msg.sender == adminAddress,
             "Only Admin can call this."
-        );
-        _;
-    }
-    
-    modifier onlyManager() {
-        require(
-            msg.sender == manager,
-            "Only manager can call this."
         );
         _;
     }

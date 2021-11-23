@@ -1,34 +1,40 @@
 pragma solidity >=0.8.7;
 
 contract Games {
+
+    enum OutcomeValue { 
+        NO_VALUE,
+        MANAGER_WINS,
+        TAKER_WINS
+    }
+
+    struct Player {
+        address account;
+        bool exists;
+        string class;
+    }
+
     address constant public adminAddress = 0x5B38Da6a701c568545dCfcB03FcB875f56beddC4;
     address public manager;
-    address[] public players;
     uint public makerAmount;
     uint public takerAmount;
     bool public is_outcome = false;
-    mapping (address => bool) public playerWallets;
-    enum OutcomeValue { NO_VALUE, MANAGER_WINS, TAKER_WINS }
+
     OutcomeValue public outcomeValue;
+    mapping (address => Player) public players;
 
 
-    constructor(string memory _gameId) payable minimumRequired {
+    constructor() payable minimumRequired {
         //set manager address
-        manager = tx.origin;
-        players.push(msg.sender);
-        playerWallets[msg.sender] = true;
+        manager = msg.sender;
         makerAmount = msg.value;
+        players[msg.sender] = Player(msg.sender, true, "manager");
     }
 
     function join() public payable minimumRequired takerAmountLimit notManager {
         //join a game
-        if(msg.value <= makerAmount) {
-            players.push(msg.sender);
-            addTakerAmount(msg.value);
-            playerWallets[msg.sender] = true;
-        } else {
-            revert();
-        }
+        players[msg.sender] = Player(msg.sender, true, "taker");
+        addTakerAmount(msg.value);
     }
 
     function resolve(bool _is_outcome, OutcomeValue _outcomeValue) public onlyAdmin {
@@ -52,18 +58,20 @@ contract Games {
         }
     }
 
+    /*
+    function all() public view returns (mapping) {
+        return players;
+    }
+    */
+
     function addTakerAmount(uint _amount) private returns (uint) {
         takerAmount = takerAmount + _amount;
         return takerAmount;
     }
 
-    function getPlayers() public view returns (address[] memory) {
-        return players;
-    }
-
     modifier onlyPlayers() {
         require(
-            playerWallets[msg.sender],
+            keccak256(bytes(players[msg.sender].class)) != keccak256(bytes("manager")),
             "Only player can call this.")
         ;
         _;
@@ -71,8 +79,8 @@ contract Games {
 
     modifier takerAmountLimit() {
         require(
-            makerAmount >= takerAmount,
-            "Offer amount must be less than the total taker amount."
+            makerAmount >= takerAmount + msg.value,
+            "Total taker amount must be less or equal the maker amount."
         );
         _;
     }

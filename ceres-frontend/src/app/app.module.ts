@@ -13,13 +13,19 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
+import { BrowseComponent } from './components/browse/browse.component';
+import { CreateComponent } from './components/create/create.component';
+import { QuestionsComponent } from './components/questions/questions.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    NavbarComponent
+    NavbarComponent,
+    BrowseComponent,
+    CreateComponent,
+    QuestionsComponent
   ],
   imports: [
     BrowserModule,

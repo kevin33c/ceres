@@ -1,5 +1,21 @@
 const express = require('express');
 const path = require('path');
+const config = require('./config/configs');
+const { Sequelize, DataTypes } = require('sequelize');
+
+
+const sequelize = new Sequelize(config.rds_db,config.rds_username, config.rds_password, {
+  host: config.rds_hostname,
+  port: config.rds_port,
+  dialect: "mysql"
+});
+
+sequelize.authenticate().then(() => {
+  console.log("Connected to the database...");
+})
+.catch(err => {
+  console.log("Cannot connect to the database!", err);
+});
 
 //initial app
 const app = express();

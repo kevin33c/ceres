@@ -6,7 +6,7 @@
   "scripts": {
     "test": "mocha",
     "start": "node app.js",
-    "start:dev": "nodemon app.js"
+    "start-test": "nodemon app.js"
   },
   "author": "Kevin Chen",
   "license": "ISC",

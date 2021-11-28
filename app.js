@@ -28,21 +28,12 @@ app.use(express.urlencoded({
 app.use(express.static(path.join(__dirname, 'dist')));
 
 
-
-//========================================
-// set up Index Route
-//========================================
-app.get('/', (req, res) => {
-    res.send('invaild endpoint');
-  });
-
-
 //========================================
 // get Dist (angular)
 //========================================
 require('./server/routes')(app);
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'dist/index.html'));
-  });
+});
 
 module.exports = app;

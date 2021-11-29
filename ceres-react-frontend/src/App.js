@@ -1,10 +1,10 @@
-//import web3 from './components/web3';
-import ConnectMetamask from './components/web3/connectMetamask';
+import Navbar from './components/navbar/Navbar';
+import './App.css';
 
 function App() {
   return (
-    <div>
-        <ConnectMetamask/>
+    <div className="container">
+      <Navbar />
     </div>
   );
 }

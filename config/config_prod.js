@@ -4,5 +4,6 @@ module.exports = {
     rds_hostname: process.env.RDS_HOSTNAME,
     rds_username: process.env.RDS_USERNAME,
     rds_port: process.env.RDS_PORT,
-    rds_db: process.env.RDS_DB
+    rds_db: process.env.RDS_DB,
+    domain: process.env.DOMAIN,
 };

@@ -2,7 +2,7 @@ import Web3 from "web3";
 import { Contracts } from './contracts.services';
 
 let web3;
-let isConnected = false;
+//let isConnected = false;
 const contracts = new Contracts;
 export class Web3Service {
 
@@ -11,20 +11,13 @@ export class Web3Service {
     }
 
     async connect() {
-
-        //isConnected = await this.checkConnection();
-
-        if (!isConnected) {
-            try {
-                await window.ethereum.request({ method: 'eth_requestAccounts' });
-            } catch (error) {
-                if (error.code === 4001) {
-                    // User rejected request
-                }
-                console.log(error);
+        try {
+            await window.ethereum.request({ method: 'eth_requestAccounts' });
+        } catch (error) {
+            if (error.code === 4001) {
+                // User rejected request
             }
-        } else {
-            console.log('here');
+            console.log(error);
         }
     }
 

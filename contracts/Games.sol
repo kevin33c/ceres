@@ -4,7 +4,7 @@ contract Games {
 
     enum OutcomeValue { 
         NO_VALUE,
-        MANAGER_WINS,
+        MAKER_WINS,
         TAKER_WINS
     }
 
@@ -15,7 +15,7 @@ contract Games {
     }
 
     address constant public adminAddress = 0x5B38Da6a701c568545dCfcB03FcB875f56beddC4;
-    address public manager;
+    address public maker;
     uint public makerAmount;
     uint public takerAmount;
     bool public is_outcome = false;
@@ -25,13 +25,13 @@ contract Games {
 
 
     constructor() payable minimumRequired {
-        //set manager address
-        manager = msg.sender;
+        //set maker address
+        maker = msg.sender;
         makerAmount = msg.value;
-        players[msg.sender] = Player(msg.sender, true, "manager");
+        players[msg.sender] = Player(msg.sender, true, "maker");
     }
 
-    function join() public payable minimumRequired takerAmountLimit notManager {
+    function join() public payable minimumRequired takerAmountLimit notMaker {
         //join a game
         players[msg.sender] = Player(msg.sender, true, "taker");
         addTakerAmount(msg.value);
@@ -50,9 +50,10 @@ contract Games {
        //
     }
 
-    function end() external payable onlyAdmin {
+    function end() external payable onlyMaker {
+        //CHANGE TO BIDDER COUNT = 0
         if(is_outcome == false && address(this).balance > 0){
-            payable(manager).transfer(address(this).balance);
+            payable(maker).transfer(address(this).balance);
         } else {
             revert("Outcome already decided OR no balance left to end game");
         }
@@ -71,7 +72,7 @@ contract Games {
 
     modifier onlyPlayers() {
         require(
-            keccak256(bytes(players[msg.sender].class)) != keccak256(bytes("manager")),
+            keccak256(bytes(players[msg.sender].class)) != keccak256(bytes("maker")),
             "Only player can call this.")
         ;
         _;
@@ -93,10 +94,18 @@ contract Games {
         _;
     }
 
-    modifier notManager() {
+    modifier notMaker() {
         require(
-            msg.sender != manager,
-            "Manager can't call this."
+            msg.sender != maker,
+            "Maker can't call this."
+        );
+        _;
+    }
+
+    modifier onlyMaker() {
+        require(
+            msg.sender == maker,
+            "Only Maker can call this."
         );
         _;
     }

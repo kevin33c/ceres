@@ -9,7 +9,7 @@ function Deploy() {
         <div>
             <Button size="small"
                 onClick={web3Service.deploy}
-                sx={{ color: 'text.primary' }} >
+                sx={{ color: "white" }} >
                 <CloudUploadIcon />
             </Button>
         </div>

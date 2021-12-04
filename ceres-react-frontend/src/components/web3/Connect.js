@@ -22,16 +22,15 @@ class Connect extends React.Component {
             <div>
                 {this.state.isConnected
                     ? <Button size="small"
-                        //onClick={web3Service.connect}
                         disabled={true}
-                        sx={{ color: 'text.primary' }} >
+                        sx={{ color: "white" }} >
                         <Badge variant="dot" color="success">
                             <ElectricalServicesIcon />
                         </Badge>
                     </Button>
                     : <Button size="small"
                         onClick={web3Service.connect}
-                        sx={{ color: 'text.primary' }} >
+                        sx={{ color: "white" }} >
                         Connect
                         <Badge variant="dot" color="error">
                             <ElectricalServicesIcon />

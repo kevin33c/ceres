@@ -13,14 +13,14 @@ import Deploy from '../web3/Deploy';
 function Navbar() {
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar className="navbar" position="sticky" color="default" sx={{ bgcolor: "#1fe0" }}>
+      <AppBar className="navbar" position="sticky" color="default" elevation={0} sx={{ bgcolor: "#1fe0" }}>
         <Toolbar variant="dense">
-          <Typography variant="h6" component="div" sx={{ color: "text.primary", flexGrow: 1 }} >
+          <Typography variant="h6" component="div" sx={{ color: "white", flexGrow: 1 }} >
             CERES
           </Typography>
           <Link to="/create" style={{ textDecoration: 'none' }}>
             <Button size="small"
-              sx={{ color: 'text.primary' }} >
+              sx={{ color: "white" }} >
               Create
             </Button>
           </Link>

@@ -1,9 +1,10 @@
 import Web3 from "web3";
 import { Contracts } from './contracts.services';
+//import { useAlert } from 'react-alert';
 
 let web3;
-//let isConnected = false;
 const contracts = new Contracts;
+//const alert = useAlert();
 export class Web3Service {
 
     constructor() {
@@ -15,9 +16,10 @@ export class Web3Service {
             await window.ethereum.request({ method: 'eth_requestAccounts' });
         } catch (error) {
             if (error.code === 4001) {
-                // User rejected request
+                console.log(error.message)
+                //alert.show('test', {type: 'error'})
             }
-            console.log(error);
+            console.log(error.message);
         }
     }
 

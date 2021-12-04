@@ -10,7 +10,7 @@ let isConnected;
 class Connect extends React.Component {
     state = {
         isConnected: "",
-      };
+    };
 
     async componentDidMount() {
         isConnected = await web3Service.checkConnection();

@@ -22,7 +22,11 @@ module.exports = (sequelize, DataTypes) => {
     },
     contract_id: {
       type: DataTypes.UUID,
-      allowNull: false
+      allowNull: false,
+      references: {
+        model: 'contracts',
+        key: 'id',
+      }
     },
     name: {
       type: DataTypes.STRING,

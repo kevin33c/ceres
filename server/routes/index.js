@@ -9,6 +9,6 @@ module.exports = (app) => {
   app.get('/api/contracts', controller.contracts.get);
   app.post('/api/contracts', controller.contracts.create);
 
-  //participants
-  app.post('/api/participants', controller.participants.create);
+  //players
+  app.post('/api/players', controller.players.create);
 };

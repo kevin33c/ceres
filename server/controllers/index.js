@@ -1,9 +1,9 @@
 const games = require('./games');
 const contracts = require('./contracts');
-const participants = require('./participants');
+const players = require('./players');
 
 module.exports = {
     games,
     contracts,
-    participants,
+    players,
 };

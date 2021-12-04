@@ -23,12 +23,19 @@ module.exports = (sequelize, DataTypes) => {
     type: {
       type: DataTypes.STRING,
       allowNull: false,
-      validate: { isIn: [['maker', 'taker']] }
     },
     name: {
       type: DataTypes.STRING,
       allowNull: false
-    }
+    },
+    abi: {
+      type: DataTypes.TEXT,
+      allowNull: false
+    },
+    bytecode: {
+      type: DataTypes.TEXT,
+      allowNull: false
+    },
   }, {
     sequelize,
     modelName: 'contracts',

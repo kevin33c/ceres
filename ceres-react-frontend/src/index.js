@@ -4,26 +4,14 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import App from './App';
 import CreateGame from './components/forms/CreateGame';
 import reportWebVitals from './reportWebVitals';
-import { transitions, positions, Provider as AlertProvider } from 'react-alert'
-import AlertTemplate from 'react-alert-template-basic'
-
-// optional configuration
-const options = {
-  position: positions.TOP_CENTER,
-  timeout: 5000,
-  offset: '20px',
-  transition: transitions.SCALE,
-}
 
 ReactDOM.render(
-  <AlertProvider template={AlertTemplate} {...options}>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<App />} />
-        <Route path="/create" element={<CreateGame />} />
-      </Routes>
-    </BrowserRouter>
-  </AlertProvider>,
+  <BrowserRouter>
+    <Routes>
+      <Route path="/" element={<App />} />
+      <Route path="/create" element={<CreateGame />} />
+    </Routes>
+  </BrowserRouter>,
   document.getElementById('root')
 );
 

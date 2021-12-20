@@ -1,14 +1,13 @@
 import Web3 from "web3";
 import { Contracts } from './contracts.services';
-//import { useAlert } from 'react-alert';
 
 let web3;
-const contracts = new Contracts;
-//const alert = useAlert();
+const contracts = new Contracts();
+
 export class Web3Service {
 
     constructor() {
-        this.checkConnection()
+        this.checkConnection();
     }
 
     async connect() {
@@ -17,7 +16,6 @@ export class Web3Service {
         } catch (error) {
             if (error.code === 4001) {
                 console.log(error.message)
-                //alert.show('test', {type: 'error'})
             }
             console.log(error.message);
         }

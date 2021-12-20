@@ -2,13 +2,13 @@ import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import './Form.css';
 import ReactSelect from "react-select";
+
 import { countryListAllIsoData, swissCities, weatherOutcomes } from '../../services/data.services';
 
 import Navbar from '../navbar/Navbar';
 
-
 import {
-   //Grid
+    //Grid
     //, MenuItem
     //, Input
     Typography
@@ -28,6 +28,8 @@ import {
     //, Box
 } from '@mui/material'
 
+
+
 function CreateGame() {
 
     const {
@@ -44,14 +46,13 @@ function CreateGame() {
     const gameType = watch("gameType");
     const country = watch("country");
     const city = watch("city");
-    const weatherOutcome = watch("weatherOutcome");
 
 
     return (
         <div>
             <Navbar />
-            <Typography variant="h6" align="center" margin="dense" sx={{color: 'white'}}>
-                Create Game
+            <Typography variant="h6" align="center" margin="dense" sx={{ color: 'white' }}>
+                Create a custom game
             </Typography>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <label>Game Type</label>
@@ -69,6 +70,7 @@ function CreateGame() {
                         />
                     )}
                 />
+                <hr />
                 {gameType &&
                     <div>
                         <label>Country</label>
@@ -95,7 +97,7 @@ function CreateGame() {
                                 <ReactSelect
                                     isClearable
                                     {...field}
-                                    options={swissCities.filter(cities => cities.country == country.value)}
+                                    options={swissCities.filter(cities => cities.country = country.value)}
                                 />
                             )}
                         />
@@ -117,7 +119,11 @@ function CreateGame() {
                         />
                     </div>
                 }
-                <input type="submit" value="Create Game"/>
+                <section>
+                    <label>MUI Picker</label>
+                </section>
+
+                <input type="submit" value="Create Game" />
             </form>
         </div>
     );

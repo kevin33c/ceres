@@ -3,15 +3,14 @@ import Box from '@mui/material/Box';
 import Alert from '@mui/material/Alert';
 import IconButton from '@mui/material/IconButton';
 import Collapse from '@mui/material/Collapse';
-import Button from '@mui/material/Button';
 import CloseIcon from '@mui/icons-material/Close';
 
 export default function TransitionAlerts() {
-  const [open, setOpen] = React.useState(true);
+  const [openAlert, setOpenAlert] = React.useState(true);
 
   return (
     <Box sx={{ width: '100%' }}>
-      <Collapse in={open}>
+      <Collapse in={openAlert}>
         <Alert
           action={
             <IconButton
@@ -19,7 +18,7 @@ export default function TransitionAlerts() {
               color="inherit"
               size="small"
               onClick={() => {
-                setOpen(false);
+                setOpenAlert(false);
               }}
             >
               <CloseIcon fontSize="inherit" />
@@ -27,18 +26,9 @@ export default function TransitionAlerts() {
           }
           sx={{ mb: 2 }}
         >
-          Close me!
+          Test Alert
         </Alert>
       </Collapse>
-      <Button
-        disabled={open}
-        variant="outlined"
-        onClick={() => {
-          setOpen(true);
-        }}
-      >
-        Re-open
-      </Button>
     </Box>
   );
 }

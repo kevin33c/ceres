@@ -1,9 +1,11 @@
 import { Component } from "react";
 import Web3 from "web3";
 import { Contracts } from './contracts.services';
+import { AlertsService } from './alerts.services';
 
 let web3;
 const contracts = new Contracts();
+const alert = new AlertsService();
 
 export class Web3Service extends Component {
 
@@ -12,9 +14,10 @@ export class Web3Service extends Component {
             await window.ethereum.request({ method: 'eth_requestAccounts' });
         } catch (error) {
             if (error.code === 4001) {
-                console.log(error.message);
+                alert.warn('You need to connect');
+                return;
             }
-            console.log(error.message);
+            alert.error('Unexpected error ocurred, please try again');
         }
     }
 

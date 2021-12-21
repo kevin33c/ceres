@@ -3,6 +3,7 @@ import { gameTypes, countryListAllIsoData, cities, weatherOutcomes } from '../..
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import { AlertsService } from '../../services/alerts.services';
 
 import {
     Typography
@@ -14,7 +15,9 @@ import {
     , TextField
     , InputLabel
     , FormControl
-} from '@mui/material'
+} from '@mui/material';
+
+const alert = new AlertsService();
 
 const style = {
     width: '30%',
@@ -76,16 +79,18 @@ function CreateGame() {
             , outcome: outcome
             , outcomeDate: outcomeDate
         });
+
+        alert.success('🦄  Game Created!');
     }
 
     function SubmitButton() {
         if (gameType && country && city && outcome && outcomeDate) {
             return <div>
-                    <Typography align='center' variant='subtitle2'>
-                        I want to create a {gameType} predicting game, I think that {city} will be {outcome} on {outcomeDate}.
-                    </Typography>
-                    <Button fullWidth variant="contained" onClick={handleSubmit} sx={{ mt: '15px', mb: '15px' }} >Create Game</Button>
-                    </div>
+                <Typography align='center' variant='subtitle2'>
+                    I want to create a {gameType} predicting game, I think that {city} will be {outcome} on {outcomeDate}.
+                </Typography>
+                <Button fullWidth variant="contained" onClick={handleSubmit} sx={{ mt: '15px', mb: '15px' }} >Create Game</Button>
+            </div>
         } else {
             return <Button fullWidth variant="contained" onClick={handleSubmit} sx={{ mt: '15px', mb: '15px' }} disabled>Create Game</Button>
         };

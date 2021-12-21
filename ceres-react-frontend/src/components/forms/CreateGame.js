@@ -8,24 +8,7 @@ import { countryListAllIsoData, swissCities, weatherOutcomes } from '../../servi
 import Navbar from '../navbar/Navbar';
 
 import {
-    //Grid
-    //, MenuItem
-    //, Input
     Typography
-    //, RadioGroup
-    //, Radio
-    //, FormHelperText
-    //, InputLabel
-    //, Select
-    //, FormControl
-    //, FormControlLabel
-    //, Checkbox
-    //, TextField
-    //, FormGroup
-    //, FormLabel
-    //, Paper
-    //, Button
-    //, Box
 } from '@mui/material'
 
 
@@ -39,6 +22,7 @@ function CreateGame() {
         watch,
         //formState: { errors }
     } = useForm();
+    
     const onSubmit = (data) => {
         console.log(JSON.stringify(data));
     };

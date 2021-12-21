@@ -1,21 +1,18 @@
+import { Component } from "react";
 import Web3 from "web3";
 import { Contracts } from './contracts.services';
 
 let web3;
 const contracts = new Contracts();
 
-export class Web3Service {
-
-    constructor() {
-        this.checkConnection();
-    }
+export class Web3Service extends Component {
 
     async connect() {
         try {
             await window.ethereum.request({ method: 'eth_requestAccounts' });
         } catch (error) {
             if (error.code === 4001) {
-                console.log(error.message)
+                console.log(error.message);
             }
             console.log(error.message);
         }

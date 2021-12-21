@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 
 import Connect from '../web3/Connect';
 import Deploy from '../web3/Deploy';
+import CreateGameModal from '../forms/CreateGameModal'
 
 //rfce
 function Navbar() {
@@ -18,12 +19,15 @@ function Navbar() {
           <Typography variant="h6" component="div" sx={{ color: "white", flexGrow: 1 }} >
             CERES
           </Typography>
+          {/*
           <Link to="/create" style={{ textDecoration: 'none' }}>
             <Button size="small"
               sx={{ color: "white" }} >
               Create
             </Button>
           </Link>
+          */}
+          <CreateGameModal />
           <Connect />
           <Deploy />
         </Toolbar>

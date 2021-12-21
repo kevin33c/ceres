@@ -3,9 +3,10 @@ import Alert from './components/utils/Alert';
 import './App.css';
 
 function App() {
+
   return (
     <div className="container">
-      <Alert />
+      <Alert severity='error'/>
       <Navbar />
     </div>
   );

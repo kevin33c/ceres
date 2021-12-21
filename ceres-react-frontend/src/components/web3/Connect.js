@@ -1,4 +1,4 @@
-import React from "react";
+import { Component } from "react";
 import Button from '@mui/material/Button';
 import ElectricalServicesIcon from '@mui/icons-material/ElectricalServices';
 import Badge from '@mui/material/Badge';
@@ -7,11 +7,11 @@ import { Web3Service } from '../../services/web3.services';
 const web3Service = new Web3Service();
 let isConnected;
 
-class Connect extends React.Component {
+class Connect extends Component {
     state = {
         isConnected: "",
     };
-    
+
 
     async componentDidMount() {
         isConnected = await web3Service.checkConnection();

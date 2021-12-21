@@ -1,18 +1,19 @@
-import * as React from 'react';
+import { useState } from 'react';
 import Box from '@mui/material/Box';
 import Alert from '@mui/material/Alert';
 import IconButton from '@mui/material/IconButton';
 import Collapse from '@mui/material/Collapse';
 import CloseIcon from '@mui/icons-material/Close';
+import PropTypes from 'prop-types';
 
-export default function TransitionAlerts() {
-  const [openAlert, setOpenAlert] = React.useState(true);
+function Alerts({ severity }) {
+  const [openAlert, setOpenAlert] = useState(true);
 
   return (
     <Box sx={{ width: '100%' }}>
       <Collapse in={openAlert}>
         <Alert
-          severity="error"
+          severity={severity}
           action={
             <IconButton
               aria-label="close"
@@ -33,3 +34,14 @@ export default function TransitionAlerts() {
     </Box>
   );
 }
+
+Alerts.defaultProps = {
+  severity: 'error'
+}
+
+Alerts.prototype = {
+  severity: PropTypes.string
+}
+
+
+export default Alerts

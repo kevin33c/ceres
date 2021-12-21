@@ -8,7 +8,7 @@ import Typography from '@mui/material/Typography';
 
 import Connect from '../web3/Connect';
 import Deploy from '../web3/Deploy';
-import CreateGameModal from '../forms/CreateGameModal'
+import CreateGame from '../forms/CreateGame'
 
 //rfce
 function Navbar() {
@@ -27,7 +27,7 @@ function Navbar() {
             </Button>
           </Link>
           */}
-          <CreateGameModal />
+          <CreateGame />
           <Connect />
           <Deploy />
         </Toolbar>

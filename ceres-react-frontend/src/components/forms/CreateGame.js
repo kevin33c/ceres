@@ -4,6 +4,7 @@ import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import { AlertsService } from '../../services/alerts.services';
+import { Web3Service } from '../../services/web3.services';
 
 import {
     Typography
@@ -15,9 +16,12 @@ import {
     , TextField
     , InputLabel
     , FormControl
+    , FormHelperText
 } from '@mui/material';
 
 const alert = new AlertsService();
+const web3Service = new Web3Service();
+let isConnected;
 
 const style = {
     width: '30%',
@@ -38,14 +42,23 @@ const style = {
 function CreateGame() {
 
     const [open, setOpen] = useState(false);
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
-
     const [gameType, setGameType] = useState('');
     const [country, setCountry] = useState('');
     const [city, setCity] = useState('');
     const [outcome, setOutcome] = useState('');
     const [outcomeDate, setOutcomeDate] = useState('');
+    const [connected, setConnected] = useState(true);
+
+    const handleOpen = async () => {
+        checkConnection()
+        setOpen(true);
+    }
+
+    const handleClose = async () => {
+        checkConnection()
+        setOpen(false);
+    }
+
     var minOutcomeDate = new Date();
     minOutcomeDate.setDate(minOutcomeDate.getDate() + 1);
 
@@ -72,21 +85,32 @@ function CreateGame() {
 
 
     function handleSubmit() {
-        console.log({
+        var data = {
             gameType: gameType
             , country: country
             , city: city
             , outcome: outcome
             , outcomeDate: outcomeDate
-        });
+        }
+        console.log(data);
 
         alert.success('🦄  Game Created!');
     }
 
+    async function checkConnection() {
+        isConnected = await web3Service.checkConnection();
+        setConnected(isConnected)
+    }
+
+    async function connect() {
+        await web3Service.connect();
+        checkConnection();
+    }
+
     function SubmitButton() {
-        if (gameType && country && city && outcome && outcomeDate) {
+        if (gameType && country && city && outcome && outcomeDate && connected) {
             return <div>
-                <Typography align='center' variant='subtitle2'>
+                <Typography align='center' variant='subtitle2' sx={{ mt: '15px'}}>
                     I want to create a {gameType} predicting game, I think that {city} will be {outcome} on {outcomeDate}.
                 </Typography>
                 <Button fullWidth variant="contained" onClick={handleSubmit} sx={{ mt: '15px', mb: '15px' }} >Create Game</Button>
@@ -99,7 +123,7 @@ function CreateGame() {
     return (
         <div>
             <Button size="small"
-                sx={{ color: "white" }}
+                sx={{ color: "black" }}
                 onClick={handleOpen}>
                 Create
             </Button>
@@ -196,6 +220,19 @@ function CreateGame() {
                                 />
                             </LocalizationProvider>
                         </FormControl>
+                        <Button
+                            fullWidth
+                            color="secondary"
+                            variant="contained"
+                            onClick={connect}
+                            sx={{ mt: '15px' }}
+                            disabled={connected}>
+                            Connect to Metamask
+                        </Button>
+                        {connected
+                            ?<FormHelperText>You are connected to Metamask</FormHelperText>
+                            :<FormHelperText>You need to connect to Metamask before creating a game</FormHelperText>
+                        }
                         <SubmitButton />
                     </form>
                 </Box>

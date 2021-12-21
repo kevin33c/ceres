@@ -3,8 +3,8 @@ import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-//import Button from '@mui/material/Button';
-//import { Link } from "react-router-dom";
+import Button from '@mui/material/Button';
+import { Link } from "react-router-dom";
 
 import Connect from '../web3/Connect';
 import Deploy from '../web3/Deploy';
@@ -16,17 +16,14 @@ function Navbar() {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar className="navbar" position="sticky" color="default" elevation={0} sx={{ bgcolor: "#1fe0" }}>
         <Toolbar variant="dense">
-          <Typography variant="h6" component="div" sx={{ color: "white", flexGrow: 1 }} >
-            CERES
-          </Typography>
-          {/*
-          <Link to="/create" style={{ textDecoration: 'none' }}>
+          <Link to="/" style={{ textDecoration: 'none' }}>
             <Button size="small"
-              sx={{ color: "white" }} >
-              Create
+              sx={{ color: "black" }} component="div">
+              Project CERES
             </Button>
           </Link>
-          */}
+          <Typography variant="h6" component="div" sx={{ color: "black", flexGrow: 1 }} >
+          </Typography>
           <CreateGame />
           <Connect />
           <Deploy />

@@ -1,10 +1,10 @@
 import { Component } from "react";
 import Web3 from "web3";
-import { Contracts } from './contracts.services';
+import { ContractsServices } from './contracts.services';
 import { AlertsService } from './alerts.services';
 
 let web3;
-const contracts = new Contracts();
+const contracts = new ContractsServices();
 const alert = new AlertsService();
 
 export class Web3Service extends Component {
@@ -12,12 +12,17 @@ export class Web3Service extends Component {
     async connect() {
         try {
             await window.ethereum.request({ method: 'eth_requestAccounts' });
+            return true;
         } catch (error) {
             if (error.code === 4001) {
                 alert.warn('You need to connect');
-                return;
+                return false;
+            } else if (error.code === -32002) {
+                alert.warn('You already have an active connection request');
+                return false;
             }
-            alert.error('Unexpected error ocurred, please try again');
+            alert.error('Unexpected error ocurred, please try again later');
+            return false;
         }
     }
 
@@ -28,14 +33,20 @@ export class Web3Service extends Component {
             web3 = new Web3(window.ethereum);
         } else if (window.web3) {
             web3 = new Web3(window.web3.currentProvider);
-        };
-        // Check if User is already connected by retrieving the accounts
-        const accounts = await web3.eth.getAccounts();
-        if (accounts.length > 0) {
-            return true;
-        } else {
-            return false;
         }
+
+        try {
+            // Check if User is already connected by retrieving the accounts
+            const accounts = await web3.eth.getAccounts();
+            if (accounts.length > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (error) {
+            alert.error('Unexpected error ocurred, please try again');
+        }
+
     }
 
     async deploy() {

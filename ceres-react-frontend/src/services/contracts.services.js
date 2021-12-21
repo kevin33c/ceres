@@ -1,7 +1,7 @@
 const axios = require('axios');
 const config = require('../config/config');
 
-export class Contracts {
+export class ContractsServices {
     async get() {
         try {
             const resp = await axios.get(config.domain + 'api/contracts');

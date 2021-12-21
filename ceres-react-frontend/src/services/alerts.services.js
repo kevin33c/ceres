@@ -28,7 +28,7 @@ export class AlertsService extends Component {
   }
 
   error(text) {
-    toast.error(text, {
+    toast.error(text || 'An unexpected error ocurred.', {
       position: "top-right",
       autoClose: 5000,
       hideProgressBar: false,

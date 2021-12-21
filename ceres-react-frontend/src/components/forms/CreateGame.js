@@ -28,7 +28,7 @@ const style = {
     maxWidth: '100vw',
     maxHeight: '100%',
     position: 'fixed',
-    top: '40%',
+    top: '45%',
     left: '30%',
     transform: 'translate(0, -50%)',
     overflowY: 'auto',
@@ -47,6 +47,7 @@ function CreateGame() {
     const [city, setCity] = useState('');
     const [outcome, setOutcome] = useState('');
     const [outcomeDate, setOutcomeDate] = useState('');
+    const [amount, setAmount] = useState(0);
     const [connected, setConnected] = useState(true);
 
     const handleOpen = async () => {
@@ -83,18 +84,29 @@ function CreateGame() {
         setOutcomeDate(event.toDateString());
     };
 
+    const handleAmountChange = (event) => {
+        setAmount(event.target.value);
+    };
 
-    function handleSubmit() {
+
+    async function handleSubmit() {
         var data = {
             gameType: gameType
             , country: country
             , city: city
             , outcome: outcome
             , outcomeDate: outcomeDate
+            , amount: amount
         }
         console.log(data);
 
-        alert.success('🦄  Game Created!');
+        try {
+            await web3Service.deploy(data);
+            alert.success('🦄  Game Created!');
+        } catch (error) {
+            alert.error();
+        }
+
     }
 
     async function checkConnection() {
@@ -108,10 +120,10 @@ function CreateGame() {
     }
 
     function SubmitButton() {
-        if (gameType && country && city && outcome && outcomeDate && connected) {
+        if (gameType && country && city && outcome && outcomeDate && connected && amount > 0) {
             return <div>
-                <Typography align='center' variant='subtitle2' sx={{ mt: '15px'}}>
-                    I want to create a {gameType} predicting game, I think that {city} will be {outcome} on {outcomeDate}.
+                <Typography align='center' variant='subtitle2' sx={{ mt: '15px' }}>
+                    I want to create a {gameType} predicting game for {amount}ETH, I think that {city} will be {outcome} on {outcomeDate}.
                 </Typography>
                 <Button fullWidth variant="contained" onClick={handleSubmit} sx={{ mt: '15px', mb: '15px' }} >Create Game</Button>
             </div>
@@ -220,6 +232,19 @@ function CreateGame() {
                                 />
                             </LocalizationProvider>
                         </FormControl>
+                        <FormControl fullWidth sx={{ mt: '15px', mb: '15px' }}>
+                            <TextField
+                                id="filled-number"
+                                label="Amount (ETH)"
+                                type="number"
+                                value={amount}
+                                onChange={handleAmountChange}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                                variant="filled"
+                            />
+                        </FormControl>
                         <Button
                             fullWidth
                             color="secondary"
@@ -230,8 +255,8 @@ function CreateGame() {
                             Connect to Metamask
                         </Button>
                         {connected
-                            ?<FormHelperText>You are connected to Metamask</FormHelperText>
-                            :<FormHelperText>You need to connect to Metamask before creating a game</FormHelperText>
+                            ? <FormHelperText>You are connected to Metamask</FormHelperText>
+                            : <FormHelperText>You need to connect to Metamask before creating a game</FormHelperText>
                         }
                         <SubmitButton />
                     </form>

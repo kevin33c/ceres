@@ -50,7 +50,7 @@ export class Web3Service extends Component {
     }
 
     async deploy(data) {
-        const contract = await contracts.get();
+        const contract = await contracts.getContract();
         const accounts = await web3.eth.getAccounts();
         const result = await new web3.eth.Contract(JSON.parse(contract.abi))
             .deploy({ data: contract.bytecode, arguments: ['Ceres Test'] })

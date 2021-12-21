@@ -43,6 +43,8 @@ function CreateGame() {
     const [city, setCity] = useState('');
     const [outcome, setOutcome] = useState('');
     const [outcomeDate, setOutcomeDate] = useState('');
+    var minOutcomeDate = new Date();
+    minOutcomeDate.setDate(minOutcomeDate.getDate() + 1);
 
     const handleGameTypeChange = (event) => {
         setGameType(event.target.value);
@@ -66,7 +68,7 @@ function CreateGame() {
     };
 
 
-    const handleSubmit = () => {
+    function handleSubmit() {
         console.log({
             gameType: gameType
             , country: country
@@ -75,6 +77,19 @@ function CreateGame() {
             , outcomeDate: outcomeDate
         });
     }
+
+    function SubmitButton() {
+        if (gameType && country && city && outcome && outcomeDate) {
+            return <div>
+                    <Typography align='center' variant='subtitle2'>
+                        I want to create a {gameType} predicting game, I think that {city} will be {outcome} on {outcomeDate}.
+                    </Typography>
+                    <Button fullWidth variant="contained" onClick={handleSubmit} sx={{ mt: '15px', mb: '15px' }} >Create Game</Button>
+                    </div>
+        } else {
+            return <Button fullWidth variant="contained" onClick={handleSubmit} sx={{ mt: '15px', mb: '15px' }} disabled>Create Game</Button>
+        };
+    };
 
     return (
         <div>
@@ -139,7 +154,7 @@ function CreateGame() {
                             >
                                 {cities?.map(option => {
                                     return (
-                                        <MenuItem key={option.value} value={option.value} disabled={option.disabled}>
+                                        <MenuItem key={option.value} value={option.label} disabled={option.disabled}>
                                             {option.label ?? option.value}
                                         </MenuItem>
                                     );
@@ -171,11 +186,12 @@ function CreateGame() {
                                     inputFormat="dd/MM/yyyy"
                                     value={outcomeDate}
                                     onChange={handleOutcomeDateChange}
+                                    minDate={minOutcomeDate}
                                     renderInput={(params) => <TextField {...params} />}
                                 />
                             </LocalizationProvider>
                         </FormControl>
-                        <Button fullWidth variant="contained" onClick={handleSubmit} sx={{ mt: '15px', mb: '15px' }}>Submit</Button>
+                        <SubmitButton />
                     </form>
                 </Box>
             </Modal>

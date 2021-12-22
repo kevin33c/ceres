@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { gameTypes, countryListAllIsoData, cities, weatherOutcomes } from '../../services/data.services';
+import { useNavigate } from "react-router-dom";
+
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import { AlertsService } from '../../services/alerts.services';
-import { Web3Service } from '../../services/web3.services';
-
+import LoadingButton from '@mui/lab/LoadingButton';
+import SendIcon from '@mui/icons-material/Send';
 import {
     Typography
     , Modal
@@ -19,8 +19,17 @@ import {
     , FormHelperText
 } from '@mui/material';
 
+
+import { gameTypes, countryListAllIsoData, cities, weatherOutcomes } from '../../services/data.services';
+import { AlertsService } from '../../services/alerts.services';
+import { Web3Service } from '../../services/web3.services';
+
+
+
 const alert = new AlertsService();
 const web3Service = new Web3Service();
+
+
 let isConnected;
 
 const style = {
@@ -41,6 +50,7 @@ const style = {
 
 function CreateGame() {
 
+    const navigate = useNavigate();
     const [open, setOpen] = useState(false);
     const [gameType, setGameType] = useState('');
     const [country, setCountry] = useState('');
@@ -49,6 +59,7 @@ function CreateGame() {
     const [outcomeDate, setOutcomeDate] = useState('');
     const [amount, setAmount] = useState(0);
     const [connected, setConnected] = useState(true);
+    const [loading, setLoading] = useState(false);
 
     const handleOpen = async () => {
         checkConnection()
@@ -90,6 +101,7 @@ function CreateGame() {
 
 
     async function handleSubmit() {
+        setLoading(true);
         var data = {
             gameType: gameType
             , country: country
@@ -102,9 +114,11 @@ function CreateGame() {
 
         try {
             await web3Service.deploy(data);
-            alert.success('🦄  Game Created!');
         } catch (error) {
             alert.error();
+        } finally {
+            setLoading(false);
+            navigate('/home');
         }
 
     }
@@ -121,14 +135,31 @@ function CreateGame() {
 
     function SubmitButton() {
         if (gameType && country && city && outcome && outcomeDate && connected && amount > 0) {
-            return <div>
-                <Typography align='center' variant='subtitle2' sx={{ mt: '15px' }}>
-                    I want to create a {gameType} predicting game for {amount}ETH, I think that {city} will be {outcome} on {outcomeDate}.
-                </Typography>
-                <Button fullWidth variant="contained" onClick={handleSubmit} sx={{ mt: '15px', mb: '15px' }} >Create Game</Button>
-            </div>
+            return  <>
+                    <Typography align='center' variant='subtitle2' sx={{ mt: '15px' }}>
+                        I want to create a {gameType} predicting game for {amount}ETH, I think that {city} will be {outcome} on {outcomeDate}.
+                    </Typography>
+                    <LoadingButton
+                        fullWidth
+                        variant="contained"
+                        onClick={handleSubmit}
+                        sx={{ mt: '15px', mb: '15px' }}
+                        loading={loading}
+                        loadingPosition="start"
+                        startIcon={<SendIcon />}
+                    >
+                        Create Game
+                    </LoadingButton>
+                    </>
         } else {
-            return <Button fullWidth variant="contained" onClick={handleSubmit} sx={{ mt: '15px', mb: '15px' }} disabled>Create Game</Button>
+            return <Button
+                    fullWidth
+                    variant="contained"
+                    sx={{ mt: '15px', mb: '15px' }}
+                    disabled
+                    >
+                    Create Game
+                   </Button>
         };
     };
 

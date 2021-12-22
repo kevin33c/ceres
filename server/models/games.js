@@ -34,6 +34,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     status: {
       type: DataTypes.STRING,
+      defaultValue: 'created',
       allowNull: false,
       validate: { isIn: [['created', 'active', 'completed', 'terminated']] }
     },
@@ -50,6 +51,14 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
       validate: { isUrl: true }
+    },
+    currency: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    amount: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
     },
     outcome: {
       type: DataTypes.STRING,

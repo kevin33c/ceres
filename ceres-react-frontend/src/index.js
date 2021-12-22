@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { ToastContainer } from "react-toastify";
@@ -11,6 +11,7 @@ ReactDOM.render(
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<App />} />
+        <Route render={() => <Navigate to='/' />} />
       </Routes>
     </BrowserRouter>
     <ToastContainer />

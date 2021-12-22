@@ -2,10 +2,12 @@ import { Component } from "react";
 import Web3 from "web3";
 import { ContractsServices } from './contracts.services';
 import { AlertsService } from './alerts.services';
+import { GamesServices } from './games.services';
 
 let web3;
 const contracts = new ContractsServices();
 const alert = new AlertsService();
+const games = new GamesServices();
 
 export class Web3Service extends Component {
 
@@ -50,13 +52,39 @@ export class Web3Service extends Component {
     }
 
     async deploy(data) {
-        const contract = await contracts.getContract();
-        const accounts = await web3.eth.getAccounts();
-        const result = await new web3.eth.Contract(JSON.parse(contract.abi))
-            .deploy({ data: contract.bytecode, arguments: ['Ceres Test'] })
-            .send({ from: accounts[0], gas: '1000000', value: web3.utils.toWei(data.amount, 'ether') });
+        //await games.createGame(data);
+        try {
+            //get contract abi & byte code to deploy
+            const contract = await contracts.getContract();
+            //get user accounts
+            const accounts = await web3.eth.getAccounts();
+            //propmt metamask to deploy contract
+            const result = await new web3.eth.Contract(JSON.parse(contract.abi))
+                .deploy({ data: contract.bytecode, arguments: ['Ceres Test'] })
+                .send({ from: accounts[0], gas: '1000000', value: web3.utils.toWei(data.amount, 'ether') });
+            //persist game data in db
+            var payload = {
+                contract_id: contract.id
+                ,name: 'some name'
+                ,contract_address: result.options.address
+                ,gameType: 'weather'
+                ,resolver_api: 'https://www.google.ch/'
+                ,address: accounts[0]
+                ,amount: data.amount
+            }
+            await games.createGame(payload);
 
-        console.log('Conctact deployed to', result.options.address);
+            console.log(payload);
+            alert.success('🦄  Game Created!');
+            console.log('Conctact deployed to', result.options.address);
+        } catch (error) {
+            if (error.code === 4001) {
+                alert.error('You need to accept the transaction in order to create a game.');
+                return;
+            }
+            alert.error('Unexpected error ocurred: ' + error);
+        }
+
 
     };
 

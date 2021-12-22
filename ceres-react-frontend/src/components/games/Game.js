@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react';
 import Navbar from '../navbar/Navbar'
 import {
   Typography
+  , LinearProgress
+  , Box
 } from '@mui/material';
 
 
@@ -23,29 +25,34 @@ function Game() {
     return () => {
       setGame({});
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   async function getGame() {
     var data = await games.getGameById(gameId);
     setGame({
       id: data.id
-      ,contract_address: data.contract_address
-      ,name: data.name
-      ,status: data.status
-      ,type: data.type
-      ,create_at: data.createdAt
-      ,updated_at: data.updatedAt
+      , contract_address: data.contract_address
+      , name: data.name
+      , status: data.status
+      , type: data.type
+      , create_at: data.createdAt
+      , updated_at: data.updatedAt
     });
   }
 
   return (
     <div>
       <Navbar />
+      {!game.id &&
+        < Box ssx={{ width: '100%' }}>
+          <LinearProgress color="secondary"/>
+        </Box>
+      }
       <Typography align='center' variant='subtitle2' sx={{ mt: '15px' }}>
         {game.create_at}
       </Typography>
-    </div>
+    </div >
   )
 }
 

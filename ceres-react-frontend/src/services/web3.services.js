@@ -72,11 +72,9 @@ export class Web3Service extends Component {
                 ,address: accounts[0]
                 ,amount: data.amount
             }
-            await games.createGame(payload);
-
-            console.log(payload);
+            const res = await games.createGame(payload);
             alert.success('🦄  Game Created!');
-            console.log('Conctact deployed to', result.options.address);
+            return res;
         } catch (error) {
             if (error.code === 4001) {
                 alert.error('You need to accept the transaction in order to create a game.');

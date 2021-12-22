@@ -20,4 +20,15 @@ module.exports = {
             .then(players => res.status(200).send(players))
             .catch(error => res.status(400).send(error));
     },
+    findByAddress(req, res) {
+        return players
+          .findOne({
+            where:
+            {
+                address: req.params.address
+            }
+          })
+          .then(player => res.status(200).send(player))
+          .catch(error => res.status(400).send(error))
+      }
 };

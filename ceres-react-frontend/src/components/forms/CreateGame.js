@@ -110,22 +110,22 @@ function CreateGame() {
             , outcomeDate: outcomeDate
             , amount: amount
         }
-        console.log(data);
 
         try {
-            await web3Service.deploy(data);
+            const res = await web3Service.deploy(data);
+            //reroute to game page
+            navigate(`/game/${res.game_id}`);
         } catch (error) {
             alert.error();
         } finally {
             setLoading(false);
-            navigate('/home');
         }
 
     }
 
     async function checkConnection() {
         isConnected = await web3Service.checkConnection();
-        setConnected(isConnected)
+        setConnected(isConnected);
     }
 
     async function connect() {
@@ -135,31 +135,31 @@ function CreateGame() {
 
     function SubmitButton() {
         if (gameType && country && city && outcome && outcomeDate && connected && amount > 0) {
-            return  <>
-                    <Typography align='center' variant='subtitle2' sx={{ mt: '15px' }}>
-                        I want to create a {gameType} predicting game for {amount}ETH, I think that {city} will be {outcome} on {outcomeDate}.
-                    </Typography>
-                    <LoadingButton
-                        fullWidth
-                        variant="contained"
-                        onClick={handleSubmit}
-                        sx={{ mt: '15px', mb: '15px' }}
-                        loading={loading}
-                        loadingPosition="start"
-                        startIcon={<SendIcon />}
-                    >
-                        Create Game
-                    </LoadingButton>
-                    </>
-        } else {
-            return <Button
+            return <>
+                <Typography align='center' variant='subtitle2' sx={{ mt: '15px' }}>
+                    I want to create a {gameType} predicting game for {amount}ETH, I think that {city} will be {outcome} on {outcomeDate}.
+                </Typography>
+                <LoadingButton
                     fullWidth
                     variant="contained"
+                    onClick={handleSubmit}
                     sx={{ mt: '15px', mb: '15px' }}
-                    disabled
-                    >
+                    loading={loading}
+                    loadingPosition="start"
+                    startIcon={<SendIcon />}
+                >
                     Create Game
-                   </Button>
+                </LoadingButton>
+            </>
+        } else {
+            return <Button
+                fullWidth
+                variant="contained"
+                sx={{ mt: '15px', mb: '15px' }}
+                disabled
+            >
+                Create Game
+            </Button>
         };
     };
 

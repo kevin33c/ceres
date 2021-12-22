@@ -48,6 +48,18 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'players',
-  });
+  },
+    {
+      indexes: [
+        {
+          name: 'address_index',
+          fields: ['address']
+        },
+        {
+          name: 'type_index',
+          fields: ['type']
+        }
+      ]
+    });
   return players;
 };

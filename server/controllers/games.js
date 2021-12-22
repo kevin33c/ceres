@@ -14,17 +14,17 @@ module.exports = {
         currency: 'eth',
         amount: req.body.amount
       })
-      .then(games => {
+      .then(game => {
         //create maker player
         players
           .create({
-            game_id: games.id,
+            game_id: game.id,
             address: req.body.address,
             type: 'maker',
             currency: 'eth',
             amount: req.body.amount,
           })
-          .then(players => res.status(201).send(players))
+          .then(player => res.status(201).send(player))
           .catch(error => res.status(400).send(error));
       })
       .catch(error => res.status(400).send(error));
@@ -35,4 +35,15 @@ module.exports = {
       .then(games => res.status(200).send(games))
       .catch(error => res.status(400).send(error));
   },
+  findById(req, res) {
+    return games
+      .findOne({
+        where:
+        {
+          id: req.params.id
+        }
+      })
+      .then(game => res.status(200).send(game))
+      .catch(error => res.status(400).send(error))
+  }
 };

@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import App from './App';
+import Game from './components/games/Game';
 import reportWebVitals from './reportWebVitals';
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
@@ -11,6 +12,7 @@ ReactDOM.render(
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<App />} />
+        <Route path="/game/:id" element={<Game />} />
         <Route render={() => <Navigate to='/' />} />
       </Routes>
     </BrowserRouter>

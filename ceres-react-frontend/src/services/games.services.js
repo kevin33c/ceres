@@ -8,8 +8,8 @@ const alert = new AlertsService();
 export class GamesServices {
     async createGame(data) {
         try {
-            const resp = await axios.post(config.domain + 'api/games', data);
-            return resp.data;
+            const res = await axios.post(config.domain + 'api/games', data);
+            return res.data;
         } catch (err) {
             // Handle Error Here
             alert.error(err);
@@ -18,18 +18,18 @@ export class GamesServices {
 
     async getGames() {
         try {
-            const resp = await axios.get(config.domain + 'api/games');
-            return resp.data;
+            const res = await axios.get(config.domain + 'api/games');
+            return res.data;
         } catch (err) {
             // Handle Error Here
             alert.error(err);
         }
     }
 
-    async getGameByAccount() {
+    async getGameById(id) {
         try {
-            const resp = await axios.get(config.domain + 'api/games');
-            return resp.data;
+            const res = await axios.get(config.domain + `api/games/${id}`);
+            return res.data;
         } catch (err) {
             // Handle Error Here
             alert.error(err);

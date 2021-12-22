@@ -48,7 +48,7 @@ module.exports = (sequelize, DataTypes) => {
       validate: { isIn: [['weather', 'flight']] }
     },
     resolver_api: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING, //JSONB
       allowNull: false,
       validate: { isUrl: true }
     },

@@ -1,5 +1,5 @@
 //SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.11;
+pragma solidity >=0.8.7;
 
 contract Games {
     struct Player {
@@ -10,40 +10,32 @@ contract Games {
 
     address private constant adminAddress = 0x182B1D0920a168d78aDa738533eD7999642B01a1;
     address private maker;
-    uint256 public makerAmount;
     uint256 public takerAmount;
-    string public outcome;
-    address[] public playersList;
-
+    address[] public playersList; //can limit player list
     mapping(address => Player) public players;
 
     constructor() payable minimumRequired {
         maker = msg.sender;
         players[msg.sender] = Player(msg.sender, true, msg.value);
-        makerAmount = msg.value;
         playersList.push(msg.sender);
     }
 
-    function join() external payable minimumRequired takerAmountLimit notMaker {
+    function joinGame() external payable minimumRequired takerAmountLimit {
         players[msg.sender] = Player(msg.sender, false, msg.value);
         addTakerAmount(msg.value);
         playersList.push(msg.sender);
     }
 
-    function distribute(string memory _outcome) external payable onlyAdmin {
-        /******************************************   
-        upon call of admin API it returns outcome 
-        and outcome value;
-       ******************************************/
+    function settleGame(uint _outcome) external payable onlyAdmin {
         //set outcome variables
-        outcome = _outcome;
-        if(keccak256(bytes(outcome)) == keccak256(bytes("MAKER_WINS"))){
+        //outcome = _outcome;
+        if(_outcome == 1){
             //if maker wins, maker take all
             payable(maker).transfer(address(this).balance);
-        } else if (keccak256(bytes(outcome)) == keccak256(bytes("TAKER_WINS"))){
-            //loop through the players playersList
+        } else if (_outcome == 2){
+            //if taker wins, loop through the players list
             for (uint i=0; i<playersList.length; i++) {
-                //if player is taker then double the amount                
+                //if player is taker then 2x the initial amount               
                 if(players[playersList[i]].is_maker == false){
                    payable(players[playersList[i]].account).transfer(players[playersList[i]].amount * 2);
                 } 
@@ -53,12 +45,8 @@ contract Games {
         }
     }
 
-    function balance() external view returns(uint256) {
-        return address(this).balance;
-    }
-
-    function end() external payable onlyMaker {
-        if (address(this).balance == makerAmount) {
+    function endGame() external payable onlyMaker {
+        if (address(this).balance == players[maker].amount) {
             payable(maker).transfer(address(this).balance);
         } else {
             revert("You can't end game, game already active.");
@@ -70,17 +58,9 @@ contract Games {
         return takerAmount;
     }
 
-    modifier onlyPlayers() {
-        require(
-            players[msg.sender].is_maker == false,
-            "Only player can call this."
-        );
-        _;
-    }
-
     modifier takerAmountLimit() {
         require(
-            makerAmount >= takerAmount + msg.value,
+            players[maker].amount >= takerAmount + msg.value,
             "Total taker amount must be less or equal the maker amount."
         );
         _;
@@ -88,11 +68,6 @@ contract Games {
 
     modifier onlyAdmin() {
         require(msg.sender == adminAddress, "Only Admin can call this.");
-        _;
-    }
-
-    modifier notMaker() {
-        require(msg.sender != maker, "Maker can't call this.");
         _;
     }
 

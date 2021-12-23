@@ -56,8 +56,6 @@ export class Web3Service extends Component {
         try {
             //get contract abi & byte code to deploy
             const contract = await contracts.getContract();
-
-            console.log(contract);
             //get user accounts
             const accounts = await web3.eth.getAccounts();
             //propmt metamask to deploy contract

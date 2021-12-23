@@ -11,9 +11,10 @@ ReactDOM.render(
   <>
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<App />} />
-        <Route path="/game/:id" element={<Game />} />
-        <Route render={() => <Navigate to='/' />} />
+        <Route path='/' element={<App />} />
+        <Route path='/game/:gameId' element={<Game />} />
+        {/*redicting to the main page, to be changed to a 404 page*/}
+        <Route path="*" element={<Navigate replace to="/" />} />
       </Routes>
     </BrowserRouter>
     <ToastContainer />

@@ -1,4 +1,4 @@
-import { useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useState, useEffect } from 'react';
 import Navbar from '../navbar/Navbar'
 import {
@@ -13,10 +13,8 @@ import { GamesServices } from '../../services/games.services';
 const games = new GamesServices()
 
 function Game() {
-
-  const location = new useLocation();
-  const gameId = location.pathname.substr(location.pathname.lastIndexOf('/') + 1);
-
+  //access to url parameter based on index.js router
+  const params = new useParams();
   const [game, setGame] = useState({});
 
   //trigger before the page load
@@ -29,7 +27,7 @@ function Game() {
   }, []);
 
   async function getGame() {
-    var data = await games.getGameById(gameId);
+    var data = await games.getGameById(params.gameId);
     setGame({
       id: data.id
       , contract_address: data.contract_address

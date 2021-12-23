@@ -1,81 +1,80 @@
 //SPDX-License-Identifier: UNLICENSED
-pragma solidity >=0.8.7;
+pragma solidity ^0.8.11;
 
 contract Games {
-
-    enum OutcomeValue { 
-        NO_VALUE,
-        MAKER_WINS,
-        TAKER_WINS
-    }
-
     struct Player {
         address account;
-        bool exists;
-        string class;
+        bool is_maker;
+        uint256 amount;
     }
 
-    address constant public adminAddress = 0x5B38Da6a701c568545dCfcB03FcB875f56beddC4;
-    address public maker;
-    uint public makerAmount;
-    uint public takerAmount;
-    bool public is_outcome = false;
+    address private constant adminAddress = 0x182B1D0920a168d78aDa738533eD7999642B01a1;
+    address private maker;
+    uint256 public makerAmount;
+    uint256 public takerAmount;
+    string public outcome;
+    address[] public playersList;
 
-    OutcomeValue public outcomeValue;
-    mapping (address => Player) public players;
-
+    mapping(address => Player) public players;
 
     constructor() payable minimumRequired {
-        //set maker address
         maker = msg.sender;
+        players[msg.sender] = Player(msg.sender, true, msg.value);
         makerAmount = msg.value;
-        players[msg.sender] = Player(msg.sender, true, "maker");
+        playersList.push(msg.sender);
     }
 
-    function join() public payable minimumRequired takerAmountLimit notMaker {
-        //join a game
-        players[msg.sender] = Player(msg.sender, true, "taker");
+    function join() external payable minimumRequired takerAmountLimit notMaker {
+        players[msg.sender] = Player(msg.sender, false, msg.value);
         addTakerAmount(msg.value);
+        playersList.push(msg.sender);
     }
 
-    function resolve(bool _is_outcome, OutcomeValue _outcomeValue) public onlyAdmin {
-       /******************************************   
+    function distribute(string memory _outcome) external payable onlyAdmin {
+        /******************************************   
         upon call of admin API it returns outcome 
         and outcome value;
        ******************************************/
-       is_outcome = _is_outcome;
-       outcomeValue = _outcomeValue;
-    }
-
-    function distribute() external payable onlyAdmin {
-       //
-    }
-
-    function end() external payable onlyMaker {
-        //CHANGE TO BIDDER COUNT = 0
-        if(is_outcome == false && address(this).balance > 0){
+        //set outcome variables
+        outcome = _outcome;
+        if(keccak256(bytes(outcome)) == keccak256(bytes("MAKER_WINS"))){
+            //if maker wins, maker take all
             payable(maker).transfer(address(this).balance);
-        } else {
-            revert("Outcome already decided OR no balance left to end game");
+        } else if (keccak256(bytes(outcome)) == keccak256(bytes("TAKER_WINS"))){
+            //loop through the players playersList
+            for (uint i=0; i<playersList.length; i++) {
+                //if player is taker then double the amount                
+                if(players[playersList[i]].is_maker == false){
+                   payable(players[playersList[i]].account).transfer(players[playersList[i]].amount * 2);
+                } 
+            }
+            //finally any remaining balance go to the maker
+            payable(maker).transfer(address(this).balance);
         }
     }
 
-    /*
-    function all() public view returns (mapping) {
-        return players;
+    function balance() external view returns(uint256) {
+        return address(this).balance;
     }
-    */
 
-    function addTakerAmount(uint _amount) private returns (uint) {
+    function end() external payable onlyMaker {
+        if (address(this).balance == makerAmount) {
+            payable(maker).transfer(address(this).balance);
+        } else {
+            revert("You can't end game, game already active.");
+        }
+    }
+
+    function addTakerAmount(uint256 _amount) private returns (uint256) {
         takerAmount = takerAmount + _amount;
         return takerAmount;
     }
 
     modifier onlyPlayers() {
         require(
-            keccak256(bytes(players[msg.sender].class)) != keccak256(bytes("maker")),
-            "Only player can call this.")
-        ;
+            players[msg.sender].is_maker == false,
+            "Only player can call this."
+        );
         _;
     }
 
@@ -88,32 +87,23 @@ contract Games {
     }
 
     modifier onlyAdmin() {
-        require(
-            msg.sender == adminAddress,
-            "Only Admin can call this."
-        );
+        require(msg.sender == adminAddress, "Only Admin can call this.");
         _;
     }
 
     modifier notMaker() {
-        require(
-            msg.sender != maker,
-            "Maker can't call this."
-        );
+        require(msg.sender != maker, "Maker can't call this.");
         _;
     }
 
     modifier onlyMaker() {
-        require(
-            msg.sender == maker,
-            "Only Maker can call this."
-        );
+        require(msg.sender == maker, "Only Maker can call this.");
         _;
     }
 
     modifier minimumRequired() {
         require(
-            msg.value > .01 ether,
+            msg.value > 0 ether,
             "Value needs to be above the minimum amount."
         );
         _;

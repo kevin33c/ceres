@@ -56,12 +56,14 @@ export class Web3Service extends Component {
         try {
             //get contract abi & byte code to deploy
             const contract = await contracts.getContract();
+
+            console.log(contract);
             //get user accounts
             const accounts = await web3.eth.getAccounts();
             //propmt metamask to deploy contract
             const result = await new web3.eth.Contract(JSON.parse(contract.abi))
-                .deploy({ data: contract.bytecode, arguments: ['Ceres Test'] })
-                .send({ from: accounts[0], gas: '1000000', value: web3.utils.toWei(data.amount, 'ether') });
+                .deploy({ data: contract.bytecode/*, arguments: ['Ceres Test'] */})
+                .send({ from: accounts[0], gas: '10000000', value: web3.utils.toWei(data.amount, 'ether') });
             //persist game data in db
             var payload = {
                 contract_id: contract.id

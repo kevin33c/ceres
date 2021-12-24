@@ -1,11 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import App from './App';
-import Game from './components/games/Game';
 import reportWebVitals from './reportWebVitals';
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+
+import App from './App';
+import Game from './components/games/Game';
+import GamesList from './components/games/GamesList';
 
 ReactDOM.render(
   <>
@@ -13,6 +15,7 @@ ReactDOM.render(
       <Routes>
         <Route path='/' element={<App />} />
         <Route path='/game/:gameId' element={<Game />} />
+        <Route path='/browse' element={<GamesList />} />
         {/*redicting to the main page, to be changed to a 404 page*/}
         <Route path="*" element={<Navigate replace to="/" />} />
       </Routes>

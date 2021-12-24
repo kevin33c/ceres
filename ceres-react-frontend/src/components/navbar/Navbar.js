@@ -22,6 +22,12 @@ function Navbar() {
           </Link>
           <Typography variant="h6" component="div" sx={{ color: "black", flexGrow: 1 }} >
           </Typography>
+          <Link to="/browse" style={{ textDecoration: 'none' }}>
+            <Button size="small"
+              sx={{ color: "black" }} component="div">
+              Browse
+            </Button>
+          </Link>
           <CreateGame />
           <Connect />
         </Toolbar>

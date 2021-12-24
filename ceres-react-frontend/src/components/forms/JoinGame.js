@@ -1,7 +1,9 @@
-//import { useState } from 'react';
+import { useState } from 'react';
 import {
     Typography
     , Box
+    , Button
+    , Modal
 } from '@mui/material';
 
 const style = {
@@ -21,13 +23,36 @@ const style = {
 
 function JoinGame() {
 
+    const [open, setOpen] = useState(false);
+
+    const handleOpen = async () => {
+        setOpen(true);
+    }
+
+    const handleClose = async () => {
+        setOpen(false);
+    }
+
     return (
         <div>
-            <Box sx={style}>
-                <Typography variant="h6" align="center" margin="dense" sx={{ color: 'black' }}>
-                    JOIN THE GAME
-                </Typography>
-            </Box>
+            <Button
+                variant="contained"
+                color="secondary"
+                onClick={handleOpen}
+                sx={{ mt: '15px', mb: '15px' }}
+            >
+                Join Game
+            </Button>
+            <Modal
+                open={open}
+                onClose={handleClose}
+            >
+                <Box sx={style}>
+                    <Typography variant="h6" align="center" margin="dense" sx={{ color: 'black' }}>
+                        JOIN THE GAME
+                    </Typography>
+                </Box>
+            </Modal>
         </div>
     )
 }

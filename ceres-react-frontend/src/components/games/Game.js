@@ -17,8 +17,6 @@ import {
   , Chip
   , Link
   , Tooltip
-  , Button
-  , Modal
 } from '@mui/material';
 import CloudQueueIcon from '@mui/icons-material/CloudQueue';
 
@@ -26,12 +24,14 @@ import CloudQueueIcon from '@mui/icons-material/CloudQueue';
 import { GamesServices } from '../../services/games.services';
 import JoinGame from '../forms/JoinGame';
 
+
 const games = new GamesServices();
 
 function Game() {
   //access to url parameter based on index.js router
   const params = new useParams();
   const [game, setGame] = useState({});
+  const [tabNumber, setTabNumber] = useState(0);
 
   //trigger before the page load
   useEffect(() => {
@@ -56,20 +56,10 @@ function Game() {
       , updated_at: data.updatedAt
     });
   }
-  const [open, setOpen] = useState(false);
-  const [tabNumber, setTabNumber] = useState(0);
 
   const handleTabChange = (event, newValue) => {
     setTabNumber(newValue);
   };
-
-  const handleOpen = async () => {
-    setOpen(true);
-  }
-
-  const handleClose = async () => {
-    setOpen(false);
-  }
 
   function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -186,26 +176,11 @@ function Game() {
                 </TableBody>
               </Table>
             </TableContainer>
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={handleOpen}
-              sx={{ mt: '15px', mb: '15px' }}
-            >
-              Join Game
-            </Button>
+            <JoinGame />
           </TabPanel>
           <TabPanel value={tabNumber} index={1}>
             Coming Soon...
           </TabPanel>
-          <Modal
-            open={open}
-            onClose={handleClose}
-          >
-            <div>
-              <JoinGame />
-            </div>
-          </Modal>
         </Container>
       }
     </div >

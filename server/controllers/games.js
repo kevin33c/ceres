@@ -31,7 +31,12 @@ module.exports = {
   },
   list(req, res) {
     return games
-      .findAll()
+      .findAll({
+        where:
+        {
+          status: ['created', 'active']
+        }
+      })
       .then(games => res.status(200).send(games))
       .catch(error => res.status(400).send(error));
   },

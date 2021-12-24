@@ -10,7 +10,6 @@ export class ContractsServices {
             const res = await axios.get(config.domain + 'api/contracts');
             return res.data;
         } catch (err) {
-            // Handle Error Here
             alert.error(err);
         }
     }

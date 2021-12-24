@@ -30,31 +30,21 @@ const games = new GamesServices();
 function Game() {
   //access to url parameter based on index.js router
   const params = new useParams();
-  const [game, setGame] = useState({});
+  const [game, setGame] = useState('');
   const [tabNumber, setTabNumber] = useState(0);
 
   //trigger before the page load
   useEffect(() => {
     getGame();
     return () => {
-      setGame({});
+      getGame({});
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   async function getGame() {
     var data = await games.getGameById(params.gameId);
-    setGame({
-      id: data.id
-      , contract_address: data.contract_address
-      , name: data.name
-      , status: data.status
-      , type: data.type
-      , amount: data.amount
-      , outcome: data.outcome
-      , create_at: data.createdAt
-      , updated_at: data.updatedAt
-    });
+    setGame(data);
   }
 
   const handleTabChange = (event, newValue) => {
@@ -98,12 +88,15 @@ function Game() {
 
         : <Container fixed>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-            <Tabs value={tabNumber} onChange={handleTabChange} textColor="primary">
+            <Tabs value={tabNumber} onChange={handleTabChange} textColor="secondary">
               <Tab label="Summary" {...a11yProps(0)} />
               <Tab label="Activities" {...a11yProps(1)} />
             </Tabs>
           </Box>
           <TabPanel value={tabNumber} index={0}>
+            <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
+              [ This is an alpha/test version, no real transaction took place ]
+            </Typography>
             <TableContainer component={Paper}>
               <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableBody>
@@ -154,7 +147,9 @@ function Game() {
                       Outcome:
                     </TableCell>
                     <TableCell align="left">
-                      {game.outcome || 'Undecided'}
+                      {game.outcome ? <Chip color="success" label={game.outcome} />
+                        : <Chip color="error" label='UNDECIDED' />
+                      }
                     </TableCell>
                   </TableRow>
                   <TableRow>
@@ -162,7 +157,7 @@ function Game() {
                       Create Date:
                     </TableCell>
                     <TableCell align="left">
-                      {game.create_at}
+                      {game.createdAt}
                     </TableCell>
                   </TableRow>
                   <TableRow>
@@ -170,7 +165,7 @@ function Game() {
                       Last Updated Date:
                     </TableCell>
                     <TableCell align="left">
-                      {game.updated_at}
+                      {game.updatedAt}
                     </TableCell>
                   </TableRow>
                 </TableBody>

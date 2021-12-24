@@ -11,7 +11,6 @@ export class GamesServices {
             const res = await axios.post(config.domain + 'api/games', data);
             return res.data;
         } catch (err) {
-            // Handle Error Here
             alert.error(err);
         }
     }
@@ -21,7 +20,6 @@ export class GamesServices {
             const res = await axios.get(config.domain + 'api/games');
             return res.data;
         } catch (err) {
-            // Handle Error Here
             alert.error(err);
         }
     }
@@ -31,7 +29,6 @@ export class GamesServices {
             const res = await axios.get(config.domain + `api/games/${id}`);
             return res.data;
         } catch (err) {
-            // Handle Error Here
             alert.error(err);
         }
     }

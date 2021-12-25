@@ -32,7 +32,9 @@ module.exports = {
                 where:
                 {
                     game_id: req.params.gameId
-                }
+                }, order: [
+                    ['createdAt', 'DESC'],
+                ]
             })
             .then(player => res.status(200).send(player))
             .catch(error => res.status(400).send(error))

@@ -1,6 +1,7 @@
 const games = require('../models').games;
-//games.sync({ force: true });
 const players = require('../models').players;
+//players.sync({ force: true });
+//games.sync({ force: true });
 
 module.exports = {
   create(req, res) {

@@ -37,6 +37,10 @@ function GamesList() {
     setGamesList(data);
   }
 
+  function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
   return (
     <div className="container">
       <Navbar />
@@ -61,7 +65,11 @@ function GamesList() {
                       {game?.contract_address}
                     </Typography>
                     <Typography noWrap variant="body2" color="text.secondary" component="div">
-                      <Chip label={game?.type} color="primary" size="small" /> <Chip label={game?.status} color="secondary" size="small" />
+                      <Chip label={capitalizeFirstLetter(game?.type)} color="primary" size="small" /> {game?.status === 'created' ? <Chip color="secondary" size="small" label={capitalizeFirstLetter(game?.status)} />
+                        : game?.status === 'active' ? <Chip color="success" size="small" label={capitalizeFirstLetter(game?.status)} />
+                          : game?.status === 'completed' ? <Chip color="primary" size="small" label={capitalizeFirstLetter(game?.status)} />
+                            : <Chip color="error" size="small" label={capitalizeFirstLetter(game?.status)} />
+                      }
                     </Typography>
                   </CardContent>
                   <CardActions>

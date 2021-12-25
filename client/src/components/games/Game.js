@@ -22,20 +22,24 @@ import CloudQueueIcon from '@mui/icons-material/CloudQueue';
 
 
 import { GamesServices } from '../../services/games.services';
+import { PlayersServices } from '../../services/players.services';
 import JoinGame from '../forms/JoinGame';
 
 
-const games = new GamesServices();
+const gamesServices = new GamesServices();
+const playersServices = new PlayersServices();
 
 function Game() {
   //access to url parameter based on index.js router
   const params = new useParams();
   const [game, setGame] = useState({});
+  const [players, setPlayers] = useState([]);
   const [tabNumber, setTabNumber] = useState(0);
 
   //trigger before the page load
   useEffect(() => {
     getGame();
+    getPlayers();
     return () => {
       setGame({});
     };
@@ -43,8 +47,13 @@ function Game() {
   }, []);
 
   async function getGame() {
-    var data = await games.getGameById(params.gameId);
+    var data = await gamesServices.getGameById(params.gameId);
     setGame(data);
+  }
+
+  async function getPlayers() {
+    var data = await playersServices.getPlayersByGameId(params.gameId);
+    setPlayers(data);
   }
 
   const handleTabChange = (event, newValue) => {
@@ -118,8 +127,8 @@ function Game() {
                     </TableCell>
                     <TableCell align="left">
                       {game?.status === 'created' ? <Chip color="secondary" label={game?.status.toUpperCase()} />
-                        : game?.status === 'active' ? <Chip color="primary" label={game?.status.toUpperCase()} />
-                          : game?.status === 'completed' ? <Chip color="success" label={game?.status.toUpperCase()} />
+                        : game?.status === 'active' ? <Chip color="success" label={game?.status.toUpperCase()} />
+                          : game?.status === 'completed' ? <Chip color="primary" label={game?.status.toUpperCase()} />
                             : <Chip color="error" label={game?.status.toUpperCase()} />
                       }
                     </TableCell>
@@ -150,6 +159,14 @@ function Game() {
                       {game?.outcome ? <Chip color="success" label={game?.outcome} />
                         : <Chip color="error" label='UNDECIDED' />
                       }
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell component="th" scope="row">
+                      Player Count:
+                    </TableCell>
+                    <TableCell align="left">
+                      {players.length}
                     </TableCell>
                   </TableRow>
                   <TableRow>

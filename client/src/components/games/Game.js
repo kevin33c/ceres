@@ -1,6 +1,8 @@
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from 'react';
 import Navbar from '../navbar/Navbar'
+import { styled } from '@mui/material/styles';
+import { tableCellClasses } from '@mui/material/TableCell';
 import {
   Typography
   , LinearProgress
@@ -17,6 +19,8 @@ import {
   , Chip
   , Link
   , Tooltip
+  , CircularProgress
+  , TableHead
 } from '@mui/material';
 import CloudQueueIcon from '@mui/icons-material/CloudQueue';
 
@@ -40,9 +44,6 @@ function Game() {
   useEffect(() => {
     getGame();
     getPlayers();
-    return () => {
-      setGame({});
-    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -59,6 +60,26 @@ function Game() {
   const handleTabChange = (event, newValue) => {
     setTabNumber(newValue);
   };
+
+  const StyledTableCell = styled(TableCell)(({ theme }) => ({
+    [`&.${tableCellClasses.head}`]: {
+      backgroundColor: theme.palette.common.black,
+      color: theme.palette.common.white,
+    },
+    [`&.${tableCellClasses.body}`]: {
+      fontSize: 14,
+    },
+  }));
+
+  const StyledTableRow = styled(TableRow)(({ theme }) => ({
+    '&:nth-of-type(odd)': {
+      backgroundColor: theme.palette.action.hover,
+    },
+    // hide last border
+    '&:last-child td, &:last-child th': {
+      border: 0,
+    },
+  }));
 
   function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -85,6 +106,40 @@ function Game() {
       id: `simple-tab-${index}`,
       'aria-controls': `simple-tabpanel-${index}`,
     };
+  }
+
+  function CircularProgressWithLabel(props) {
+    return (
+      <Box sx={{ position: 'relative', display: 'inline-flex' }}>
+        <CircularProgress variant="determinate" {...props} />
+        <Box
+          sx={{
+            top: 0,
+            left: 0,
+            bottom: 0,
+            right: 0,
+            position: 'absolute',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <Typography variant="caption" component="div" color="text.secondary">
+            {`${Math.round(props.value)}%`}
+          </Typography>
+        </Box>
+      </Box>
+    );
+  }
+
+  function ParticipatedAmountSum() {
+    var total = 0
+    for (var i = 0; i < players.length; i++) {
+      if (players[i].type === 'taker') {
+        total += players[i].amount;
+      }
+    }
+    return total;
   }
 
   return (
@@ -153,6 +208,17 @@ function Game() {
                   </TableRow>
                   <TableRow>
                     <TableCell component="th" scope="row">
+                      Amount Participated:
+                    </TableCell>
+                    <TableCell align="left">
+                      <Typography variant='subtitle2'>
+                        {ParticipatedAmountSum()} ETH
+                      </Typography>
+                      <CircularProgressWithLabel value={(ParticipatedAmountSum() / game.amount) * 100} />
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell component="th" scope="row">
                       Outcome:
                     </TableCell>
                     <TableCell align="left">
@@ -166,7 +232,7 @@ function Game() {
                       Player Count:
                     </TableCell>
                     <TableCell align="left">
-                      {players.length}
+                      {players?.length}
                     </TableCell>
                   </TableRow>
                   <TableRow>
@@ -191,7 +257,46 @@ function Game() {
             <JoinGame data={game} />
           </TabPanel>
           <TabPanel value={tabNumber} index={1}>
-            Coming Soon...
+            <TableContainer component={Paper}>
+              <Table sx={{ minWidth: 700 }} aria-label="customized table">
+                <TableHead>
+                  <TableRow>
+                    <StyledTableCell>
+                      Date
+                    </StyledTableCell>
+                    <StyledTableCell align="left">
+                      Account Address
+                    </StyledTableCell>
+                    <StyledTableCell align="left">
+                      Activity
+                    </StyledTableCell>
+                    <StyledTableCell align="left">
+                      Amount
+                    </StyledTableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {players.map((row) => (
+                    <StyledTableRow key={row.id}>
+                      <StyledTableCell component="th" scope="row">
+                        {row.createdAt}
+                      </StyledTableCell>
+                      <StyledTableCell align="left">
+                        {row.address}
+                      </StyledTableCell>
+                      <StyledTableCell align="left">
+                        {row?.type === 'maker' ? 'Game Created'
+                          : 'Joined Game'
+                        }
+                      </StyledTableCell>
+                      <StyledTableCell align="left">
+                        {row.amount} ETH
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
           </TabPanel>
         </Container>
       }

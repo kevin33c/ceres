@@ -26,9 +26,6 @@ function GamesList() {
   //trigger before the page load
   useEffect(() => {
     getGames();
-    return () => {
-      setGamesList([]);
-    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

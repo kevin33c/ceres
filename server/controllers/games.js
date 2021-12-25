@@ -11,7 +11,6 @@ module.exports = {
         contract_address: req.body.contract_address,
         type: req.body.gameType,
         resolver_api: req.body.resolver_api,
-        currency: 'eth',
         amount: req.body.amount
       })
       .then(game => {
@@ -21,7 +20,6 @@ module.exports = {
             game_id: game.id,
             address: req.body.address,
             type: 'maker',
-            currency: 'eth',
             amount: req.body.amount,
           })
           .then(player => res.status(201).send(player))

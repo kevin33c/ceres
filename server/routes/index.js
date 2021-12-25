@@ -11,7 +11,6 @@ module.exports = (app) => {
   app.post('/api/contracts', controller.contracts.create);
 
   //players
-  app.post('/api/players', controller.players.create);
-  app.get('/api/players', controller.players.list);
-  app.get('/api/players/:address', controller.players.findByAddress);
+  app.post('/api/players', controller.players.join);
+  app.get('/api/players/:gameId', controller.players.findByGameId);
 };

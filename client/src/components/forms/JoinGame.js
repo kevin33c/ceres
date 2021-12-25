@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from "react-router-dom";
 import LoadingButton from '@mui/lab/LoadingButton';
 import {
     Typography
@@ -34,6 +35,7 @@ const style = {
 let isConnected;
 
 function JoinGame(props) {
+    const navigate = useNavigate();
     const [open, setOpen] = useState(false);
     const [amount, setAmount] = useState(0);
     const [connected, setConnected] = useState(true);
@@ -57,13 +59,14 @@ function JoinGame(props) {
         setLoading(true);
         var data = {
             amount: amount
+            , game_id: props.data.id
             , contract_address: props.data.contract_address
         }
         try {
-            const res = await web3Service.join(data);
-            console.log(res);
+            await web3Service.join(data);
+            navigate('/');
         } catch (error) {
-            console.log(error);
+            alert.error(error);
         } finally {
             setLoading(false);
         }

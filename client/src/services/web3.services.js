@@ -3,11 +3,13 @@ import Web3 from "web3";
 import { ContractsServices } from './contracts.services';
 import { AlertsService } from './alerts.services';
 import { GamesServices } from './games.services';
+import { PlayersServices } from './players.services';
 
 let web3;
 const contracts = new ContractsServices();
 const alert = new AlertsService();
-const games = new GamesServices();
+const gamesServices = new GamesServices();
+const playersServices = new PlayersServices();
 
 export class Web3Service extends Component {
 
@@ -71,7 +73,7 @@ export class Web3Service extends Component {
                 , amount: data.amount
             }
 
-            const res = await games.createGame(payload);
+            const res = await gamesServices.createGame(payload);
             alert.success('🦄  Game Created!');
             return res;
         } catch (error) {
@@ -92,25 +94,20 @@ export class Web3Service extends Component {
             //create contract instance
             const contractInstance = new web3.eth.Contract(JSON.parse(contract.abi), data.contract_address);
             //call join game function in eth contract
-            const res = await contractInstance.methods
+            await contractInstance.methods
                 .joinGame()
-                .send({ from: accounts[0], gas: '10000000', value: web3.utils.toWei(data.amount, 'ether') })
-                .on('transactionHash', (hash) => {
-                    console.log("ON transactionHash:", hash);
-                })
-                .on('confirmation', (confirmationNumber, receipt) => {
-                    console.log("ON confirmation:", confirmationNumber, receipt);
-                })
-                .on('receipt', (receipt) => {
-                    console.log(receipt);
-                })
-                .on('error', (err) => {
-                    console.log(err);
-                });
-
+                .send({ from: accounts[0], gas: '10000000', value: web3.utils.toWei(data.amount, 'ether') });
+            //create taker
+            var payload = {
+                game_id: data.game_id
+                , amount: data.amount
+                , address: accounts[0]
+            }
+            const res = await playersServices.join(payload);
+            alert.success('🦄  Game Joined Successfully!');
             return res;
         } catch (error) {
-            console.log(error);
+            alert.error(error);
         }
     }
 

@@ -13,9 +13,9 @@ var abi = '[\n\t{\n\t\t\"inputs\": [],\n\t\t\"stateMutability\": \"payable\",\n\
 
 var contract_address = '0xde1f41CE7702A373a808436d5074108DD2DB398E'
 
-var outcome = "2"
+var outcome = "2" //1 = maker wins 2 = taker wins
 
-async function settle(abi, contract_address, outcome) {
+async function settle(/*abi, contract_address, outcome*/) {
   const accounts = await web3.eth.getAccounts();
   //create contract instance
   const contractInstance = new web3.eth.Contract(JSON.parse(abi), contract_address);

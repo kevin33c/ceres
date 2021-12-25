@@ -19,7 +19,7 @@ module.exports = {
                     },
                         {
                             where:
-                                { id: req.body.game_id, }
+                                { id: req.body.game_id }
                         })
                     .then(game => res.status(201).send(game))
                     .catch(error => res.status(400).send(error));

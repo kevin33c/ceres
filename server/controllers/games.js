@@ -32,7 +32,7 @@ module.exports = {
       .findAll({
         where:
         {
-          status: ['created', 'active']
+          status: ['created', 'active', 'completed'] //TODO remove completed
         }
         , order: [
           ['createdAt', 'DESC'],
@@ -51,5 +51,30 @@ module.exports = {
       })
       .then(game => res.status(200).send(game))
       .catch(error => res.status(400).send(error))
+  },
+  terminateGameByID(req, res) {
+    return games
+      .update({
+        status: 'terminated'
+      },
+        {
+          where:
+            { id: req.params.id }
+        })
+      .then(game => res.status(201).send(game))
+      .catch(error => res.status(400).send(error));
+  },
+  completeGameByID(req, res) { //TODO remove complete game end point
+    return games
+      .update({
+        status: 'completed'
+        ,outcome: 'taker_wins'
+      },
+        {
+          where:
+            { id: req.params.id }
+        })
+      .then(game => res.status(201).send(game))
+      .catch(error => res.status(400).send(error));
   }
 };

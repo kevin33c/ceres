@@ -48,11 +48,9 @@ export class Web3Service extends Component {
         } catch (error) {
             alert.error('Unexpected error ocurred, please try again');
         }
-
     }
 
     async deploy(data) {
-        //await games.createGame(data);
         try {
             //get contract abi & byte code to deploy
             const contract = await contracts.getContract();
@@ -60,17 +58,17 @@ export class Web3Service extends Component {
             const accounts = await web3.eth.getAccounts();
             //propmt metamask to deploy contract
             const result = await new web3.eth.Contract(JSON.parse(contract.abi))
-                .deploy({ data: contract.bytecode/*, arguments: ['Ceres Test'] */})
+                .deploy({ data: contract.bytecode/*, arguments: ['Ceres Test'] */ })
                 .send({ from: accounts[0], gas: '10000000', value: web3.utils.toWei(data.amount, 'ether') });
             //persist game data in db
             var payload = {
                 contract_id: contract.id
-                ,name: 'some name'
-                ,contract_address: result.options.address
-                ,gameType: 'weather'
-                ,resolver_api: 'https://www.google.ch/'
-                ,address: accounts[0]
-                ,amount: data.amount
+                , name: 'This ONE!'
+                , contract_address: result.options.address
+                , gameType: 'weather'
+                , resolver_api: 'https://www.google.ch/'
+                , address: accounts[0]
+                , amount: data.amount
             }
             const res = await games.createGame(payload);
             alert.success('🦄  Game Created!');
@@ -82,8 +80,37 @@ export class Web3Service extends Component {
             }
             alert.error('Unexpected error ocurred: ' + error);
         }
-
-
     };
+
+    async join(data) {
+        try {
+            //get contract abi & byte code to deploy
+            const contract = await contracts.getContract();
+            //get user accounts
+            const accounts = await web3.eth.getAccounts();
+            //create contract instance
+            const contractInstance = new web3.eth.Contract(JSON.parse(contract.abi), data.contract_address);
+            //call join game function in eth contract
+            const res = await contractInstance.methods
+                .joinGame()
+                .send({ from: accounts[0], gas: '10000000', value: web3.utils.toWei(data.amount, 'ether') })
+                .on('transactionHash', (hash) => {
+                    console.log("ON transactionHash:", hash);
+                })
+                .on('confirmation', (confirmationNumber, receipt) => {
+                    console.log("ON confirmation:", confirmationNumber, receipt);
+                })
+                .on('receipt', (receipt) => {
+                    console.log(receipt);
+                })
+                .on('error', (err) => {
+                    console.log(err);
+                });
+
+                return res;
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
 }

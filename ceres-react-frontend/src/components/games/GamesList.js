@@ -13,6 +13,8 @@ import {
   , CardMedia
   , Grid
   , Chip
+  , Box
+  , LinearProgress
 } from '@mui/material';
 
 const games = new GamesServices();
@@ -38,8 +40,12 @@ function GamesList() {
   return (
     <div className="container">
       <Navbar />
-      {gamesList &&
-        <Container fixed>
+      {gamesList.length === 0
+        ? < Box sx={{ width: '100%' }}>
+          <LinearProgress color="secondary" />
+        </Box>
+
+        : <Container fixed>
           <Grid container spacing={2} sx={{ mt: '3%' }}>
             {gamesList?.map((game) => (
               <Grid item xs={3} key={game?.id}>

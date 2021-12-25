@@ -171,7 +171,7 @@ function Game() {
                 </TableBody>
               </Table>
             </TableContainer>
-            <JoinGame />
+            <JoinGame data={game}/>
           </TabPanel>
           <TabPanel value={tabNumber} index={1}>
             Coming Soon...

@@ -8,7 +8,7 @@ contract Games {
         uint256 amount;
     }
 
-    address private constant adminAddress = 0x5B38Da6a701c568545dCfcB03FcB875f56beddC4;
+    address private constant adminAddress = 0x182B1D0920a168d78aDa738533eD7999642B01a1;
     address private maker;
     uint256 public makerAmount;
     uint256 public takerAmount;

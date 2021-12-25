@@ -37,7 +37,7 @@ app.use(express.urlencoded({
 //========================================
 // set static folder (angular)
 //========================================
-app.use(express.static(path.join(__dirname, 'dist')));
+app.use(express.static('ceres-react-frontend/build'));
 
 
 //========================================
@@ -45,7 +45,7 @@ app.use(express.static(path.join(__dirname, 'dist')));
 //========================================
 require('./server/routes')(app);
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'dist/index.html'));
+    res.sendFile(path.resolve(__dirname, 'ceres-react-frontend', 'build', 'index.html'));
 });
 
 module.exports = app;

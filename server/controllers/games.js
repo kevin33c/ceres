@@ -36,6 +36,9 @@ module.exports = {
         {
           status: ['created', 'active']
         }
+        , order: [
+          ['createdAt', 'DESC'],
+        ]
       })
       .then(games => res.status(200).send(games))
       .catch(error => res.status(400).send(error));

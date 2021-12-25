@@ -70,6 +70,7 @@ export class Web3Service extends Component {
                 , address: accounts[0]
                 , amount: data.amount
             }
+
             const res = await games.createGame(payload);
             alert.success('🦄  Game Created!');
             return res;
@@ -107,7 +108,7 @@ export class Web3Service extends Component {
                     console.log(err);
                 });
 
-                return res;
+            return res;
         } catch (error) {
             console.log(error);
         }

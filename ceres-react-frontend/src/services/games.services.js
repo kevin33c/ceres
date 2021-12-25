@@ -8,7 +8,7 @@ const alert = new AlertsService();
 export class GamesServices {
     async createGame(data) {
         try {
-            const res = await axios.post(config.domain + 'api/games', data);
+            const res = await axios.post(`${config.domain}api/games`, data);
             return res.data;
         } catch (err) {
             alert.error(err);
@@ -17,7 +17,7 @@ export class GamesServices {
 
     async getGames() {
         try {
-            const res = await axios.get(config.domain + 'api/games');
+            const res = await axios.get(`${config.domain}api/games`);
             return res.data;
         } catch (err) {
             alert.error(err);
@@ -26,7 +26,7 @@ export class GamesServices {
 
     async getGameById(id) {
         try {
-            const res = await axios.get(config.domain + `api/games/${id}`);
+            const res = await axios.get(`${config.domain}api/games/${id}`);
             return res.data;
         } catch (err) {
             alert.error(err);

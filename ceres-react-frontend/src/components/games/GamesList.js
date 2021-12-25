@@ -27,7 +27,7 @@ function GamesList() {
   useEffect(() => {
     getGames();
     return () => {
-      getGames({});
+      setGamesList([]);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -40,7 +40,7 @@ function GamesList() {
   return (
     <div className="container">
       <Navbar />
-      {gamesList.length === 0
+      {gamesList?.length === 0
         ? < Box sx={{ width: '100%' }}>
           <LinearProgress color="secondary" />
         </Box>

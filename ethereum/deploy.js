@@ -18,7 +18,6 @@ const deploy = async () => {
             .send({ from: accounts[0], gas: '1000000' });
     
     console.log('Conctact deployed to', result.options.address);
-    //https://rinkeby.etherscan.io/
 };
 
 deploy();

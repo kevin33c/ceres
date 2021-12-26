@@ -1,3 +1,4 @@
+const compression = require('compression')
 const express = require('express');
 const path = require('path');
 const http = require('http');
@@ -12,8 +13,8 @@ app.set('port', port);
 let server = http.createServer(app);
 
 server = app.listen(port, () => {
-    console.log('Server started on http://localhost:' + port);
-  });
+  console.log('Server started on http://localhost:' + port);
+});
 
 //= =======================================
 // Enable CORS from client-side
@@ -35,6 +36,11 @@ app.use(express.urlencoded({
 }));
 
 //========================================
+// Enable compression
+//========================================
+app.use(compression());
+
+//========================================
 // set static folder (angular)
 //========================================
 app.use(express.static('client/build'));
@@ -45,7 +51,7 @@ app.use(express.static('client/build'));
 //========================================
 require('./server/routes')(app);
 app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+  res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
 });
 
 module.exports = app;

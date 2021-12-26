@@ -167,7 +167,8 @@ function CreateGame() {
         <div>
             <Button size="small"
                 sx={{ color: "black" }}
-                onClick={handleOpen}>
+                onClick={handleOpen}
+            >
                 Create
             </Button>
             <Modal

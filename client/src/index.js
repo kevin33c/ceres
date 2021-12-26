@@ -8,6 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import App from './App';
 import Game from './components/games/Game';
 import GamesList from './components/games/GamesList';
+import Page404 from './components/Page404';
 
 ReactDOM.render(
   <>
@@ -16,8 +17,9 @@ ReactDOM.render(
         <Route path='/' element={<App />} />
         <Route path='/game/:gameId' element={<Game />} />
         <Route path='/browse' element={<GamesList />} />
+        <Route path='/notfound' element={<Page404 />} />
         {/*redicting to the main page, to be changed to a 404 page*/}
-        <Route path="*" element={<Navigate replace to="/" />} />
+        <Route path="*" element={<Navigate replace to="/notfound" />} />
       </Routes>
     </BrowserRouter>
     <ToastContainer />

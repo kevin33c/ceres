@@ -14,17 +14,19 @@ function Navbar() {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar className="navbar" position="sticky" color="default" elevation={0} sx={{ bgcolor: "#1fe0" }}>
         <Toolbar variant="dense">
-          <Link to="/" style={{ textDecoration: 'none' }}>
+          <Link to="/" style={{ textDecoration: 'none' }} className='neon-style'>
+            [
             <Button size="small"
               sx={{ color: "black" }} component="div">
               Project CERES
             </Button>
+            ]
           </Link>
           <Typography variant="h6" component="div" sx={{ color: "black", flexGrow: 1 }} >
           </Typography>
           <Link to="/browse" style={{ textDecoration: 'none' }}>
             <Button size="small"
-              sx={{ color: "black" }} component="div">
+              sx={{ color: "black" }}>
               Browse
             </Button>
           </Link>

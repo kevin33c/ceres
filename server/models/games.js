@@ -47,10 +47,9 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: { isIn: [['weather', 'flight']] }
     },
-    resolver_api: {
-      type: DataTypes.STRING, //JSONB
+    attributes: {
+      type: DataTypes.STRING,
       allowNull: false,
-      validate: { isUrl: true }
     },
     currency: {
       type: DataTypes.STRING,

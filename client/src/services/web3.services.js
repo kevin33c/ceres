@@ -65,14 +65,19 @@ export class Web3Service extends Component {
             //persist game data in db
             var payload = {
                 contract_id: contract.id
-                , name: 'This ONE!'
+                , name: `${data.city}, ${data.country} will be ${data.outcome} on ${data.outcomeDate}`
                 , contract_address: result.options.address
-                , gameType: 'weather'
-                , resolver_api: 'https://www.google.ch/'
+                , gameType: data.gameType
+                , attributes: {
+                    country: data.country
+                    , city: data.city
+                    , outcome: data.outcome
+                    , outcomeDate: new Date(data.outcomeDate).toLocaleString()
+                }
                 , address: accounts[0]
                 , amount: data.amount
             }
-
+            
             const res = await gamesServices.createGame(payload);
             alert.success('🦄  Game Created!');
             return res;

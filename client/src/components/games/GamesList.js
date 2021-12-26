@@ -58,15 +58,15 @@ function GamesList() {
                     image="/static/images/metamask-fox.png"
                   />
                   <CardContent>
-                    <Typography noWrap gutterBottom variant="body2" component="div">
-                      {game?.contract_address}
-                    </Typography>
-                    <Typography noWrap variant="body2" color="text.secondary" component="div">
+                    <Typography variant="body2" color="text.secondary" component="div">
                       <Chip label={capitalizeFirstLetter(game?.type)} color="primary" size="small" /> {game?.status === 'created' ? <Chip color="secondary" size="small" label={capitalizeFirstLetter(game?.status)} />
                         : game?.status === 'active' ? <Chip color="success" size="small" label={capitalizeFirstLetter(game?.status)} />
                           : game?.status === 'completed' ? <Chip color="primary" size="small" label={capitalizeFirstLetter(game?.status)} />
                             : <Chip color="error" size="small" label={capitalizeFirstLetter(game?.status)} />
                       }
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary" component="p" sx={{ mt: '5%' }}>
+                      {game?.name}
                     </Typography>
                   </CardContent>
                   <CardActions>

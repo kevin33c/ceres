@@ -19,7 +19,6 @@ import {
   , Chip
   , Link
   , Tooltip
-  , CircularProgress
   , TableHead
 } from '@mui/material';
 import CloudQueueIcon from '@mui/icons-material/CloudQueue';
@@ -108,30 +107,6 @@ function Game() {
     };
   }
 
-  function CircularProgressWithLabel(props) {
-    return (
-      <Box sx={{ position: 'relative', display: 'inline-flex' }}>
-        <CircularProgress variant="determinate" {...props} />
-        <Box
-          sx={{
-            top: 0,
-            left: 0,
-            bottom: 0,
-            right: 0,
-            position: 'absolute',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          <Typography variant="caption" component="div" color="text.secondary">
-            {`${Math.round(props.value)}%`}
-          </Typography>
-        </Box>
-      </Box>
-    );
-  }
-
   function ParticipatedAmountSum() {
     var total = 0
     for (var i = 0; i < players.length; i++) {
@@ -139,7 +114,9 @@ function Game() {
         total += players[i].amount;
       }
     }
-    return total;
+    var participatedPercentage = Math.round((total / game?.amount) * 100);
+
+    return { total: total, percentage: participatedPercentage };
   }
 
   return (
@@ -200,10 +177,18 @@ function Game() {
                   </TableRow>
                   <TableRow>
                     <TableCell component="th" scope="row">
-                      Amount:
+                      Game Name:
                     </TableCell>
                     <TableCell align="left">
-                      {game?.amount}ETH
+                      {game?.name}
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell component="th" scope="row">
+                      Game Amount:
+                    </TableCell>
+                    <TableCell align="left">
+                      {game?.amount} {game?.currency.toUpperCase()}
                     </TableCell>
                   </TableRow>
                   <TableRow>
@@ -212,9 +197,8 @@ function Game() {
                     </TableCell>
                     <TableCell align="left">
                       <Typography variant='subtitle2'>
-                        {ParticipatedAmountSum()} ETH
+                        {ParticipatedAmountSum().total} {game?.currency.toUpperCase()} ({ParticipatedAmountSum().percentage}% participated)
                       </Typography>
-                      <CircularProgressWithLabel value={(ParticipatedAmountSum() / game.amount) * 100} />
                     </TableCell>
                   </TableRow>
                   <TableRow>
@@ -229,26 +213,10 @@ function Game() {
                   </TableRow>
                   <TableRow>
                     <TableCell component="th" scope="row">
-                      Player Count:
-                    </TableCell>
-                    <TableCell align="left">
-                      {players?.length}
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell component="th" scope="row">
-                      Create Date:
+                      Timestamp:
                     </TableCell>
                     <TableCell align="left">
                       {game?.createdAt}
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell component="th" scope="row">
-                      Last Updated Date:
-                    </TableCell>
-                    <TableCell align="left">
-                      {game?.updatedAt}
                     </TableCell>
                   </TableRow>
                 </TableBody>

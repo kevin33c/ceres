@@ -10,7 +10,7 @@ module.exports = {
         name: req.body.name,
         contract_address: req.body.contract_address,
         type: req.body.gameType,
-        resolver_api: req.body.resolver_api,
+        attributes: JSON.stringify(req.body.attributes),
         amount: req.body.amount
       })
       .then(game => {

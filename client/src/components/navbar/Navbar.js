@@ -17,7 +17,7 @@ function Navbar() {
           <Link to="/" style={{ textDecoration: 'none' }} className='neon-style'>
             [
             <Button size="small"
-              sx={{ color: "black" }} component="div">
+              sx={{ color: "black", fontWeight: 'bold' }} component="div">
               Project CERES
             </Button>
             ]
